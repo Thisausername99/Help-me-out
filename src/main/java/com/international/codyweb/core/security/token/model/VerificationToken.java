@@ -32,7 +32,7 @@ public class VerificationToken {
     
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinColumn(nullable = false, name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName ="id")
     private User user;
 
     @Transient

@@ -120,6 +120,7 @@ public class UserServiceImpls implements UserService {
         encodePassword(signupRequest, userEntity);
         updateUserRoles(userEntity);
         userRepository.save(userEntity);
+        System.out.println("GOT HERE");
         sendRegistrationConfirmationEmail(userEntity);
 		
 	}
@@ -139,8 +140,9 @@ public class UserServiceImpls implements UserService {
 	@Override
 	public void sendRegistrationConfirmationEmail(User user) {
 		VerificationToken verificationToken = verificationTokenService.createVerificationToken();
-		System.out.println(verificationToken.toString());
 		verificationToken.setUser(user);
+		System.out.println(verificationToken.toString());
+		System.out.println(user.getEmail());
 		verificationTokenRepository.save(verificationToken);
         AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
         emailContext.init(user);
