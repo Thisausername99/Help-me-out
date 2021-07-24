@@ -22,6 +22,9 @@ import org.springframework.stereotype.Service;
 
 import com.international.codyweb.core.email.context.AccountVerificationEmailContext;
 import com.international.codyweb.core.email.service.EmailService;
+import com.international.codyweb.core.exception.InvalidTokenException;
+import com.international.codyweb.core.exception.ResourceNotFoundException;
+import com.international.codyweb.core.exception.UserAlreadyExistException;
 import com.international.codyweb.core.security.token.model.VerificationToken;
 import com.international.codyweb.core.security.token.repository.VerificationTokenRepository;
 import com.international.codyweb.core.security.token.service.VerificationTokenService;
@@ -108,9 +111,9 @@ public class UserServiceImpls implements UserService {
     }
 
 	@Override
-	public void register(SignupRequest signupRequest) {
+	public void register(SignupRequest signupRequest) throws UserAlreadyExistException{
 		if(checkIfUserExist(signupRequest.getEmail())){
-            throw new RuntimeException("User already exists for this email");
+            throw new UserAlreadyExistException("User already exists for this email");
         }
         User userEntity = new User();
         BeanUtils.copyProperties(signupRequest, userEntity);
@@ -155,10 +158,10 @@ public class UserServiceImpls implements UserService {
 	
 	
 	@Override
-	public boolean verifyUser(String token) throws Exception {
+	public boolean verifyUser(String token) throws InvalidTokenException {
 		VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
 		if(Objects.isNull(verificationToken) || !StringUtils.equals(token, verificationToken.getToken()) || verificationToken.isExpired()){
-            throw new Exception("Token is not valid");
+            throw new InvalidTokenException("Token is not valid");
         }
         User user = userRepository.getOne(verificationToken.getUser().getId());
         if(Objects.isNull(user)){
@@ -175,8 +178,8 @@ public class UserServiceImpls implements UserService {
 	
 	
 	@Override
-	public User getUserById(Long id) {
-		return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+	public User getUserById(Long id) throws ResourceNotFoundException {
+		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Error: User is not found."));
 	}
     
     

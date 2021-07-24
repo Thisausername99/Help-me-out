@@ -35,6 +35,30 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	    return message;
 	}
 	
+	@ExceptionHandler(UserAlreadyExistException.class)
+	@ResponseStatus(value = HttpStatus.CONFLICT)
+	  public ErrorMessage UserAlreadyExistException(ResourceNotFoundException ex, WebRequest request) {
+	    ErrorMessage message = new ErrorMessage(
+    		HttpStatus.CONFLICT.value(),
+            new Date(),
+            ex.getMessage(),
+            request.getDescription(false));
+	    
+	    return message;
+	}
+	
+	@ExceptionHandler(InvalidTokenException.class)
+	@ResponseStatus(value = HttpStatus.NOT_FOUND)
+	  public ErrorMessage invalidTokenException(ResourceNotFoundException ex, WebRequest request) {
+	    ErrorMessage message = new ErrorMessage(
+    		HttpStatus.NOT_FOUND.value(),
+            new Date(),
+            ex.getMessage(),
+            request.getDescription(false));
+	    
+	    return message;
+	}
+	
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	  public ErrorMessage globalExceptionHandler(Exception ex, WebRequest request) {
