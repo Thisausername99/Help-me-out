@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 @EnableJpaAuditing
 
 public class CodyWebApplication {
-	
+			
 	private static final Logger LOG = LoggerFactory.getLogger(CodyWebApplication.class);
 	
 	public static void main(String[] args) {

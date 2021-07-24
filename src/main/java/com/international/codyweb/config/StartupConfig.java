@@ -6,11 +6,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.international.codyweb.models.ERole;
-import com.international.codyweb.models.Role;
-import com.international.codyweb.models.User;
-import com.international.codyweb.repositories.RoleRepository;
-import com.international.codyweb.repositories.UserRepository;
+import com.international.codyweb.core.user.ERole;
+import com.international.codyweb.core.user.model.Role;
+import com.international.codyweb.core.user.model.User;
+import com.international.codyweb.core.user.repository.RoleRepository;
+import com.international.codyweb.core.user.repository.UserRepository;
 
 @Configuration
 //@Transactional("primaryTransactionManager")
