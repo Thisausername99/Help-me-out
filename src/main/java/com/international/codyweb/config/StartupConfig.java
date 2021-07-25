@@ -20,12 +20,12 @@ public class StartupConfig {
 	
 	
 	@Bean
-	CommandLineRunner commandLineRunner(RoleRepository roleRepository) {
+	CommandLineRunner commandLineRunner(RoleRepository roleRepository, UserRepository userRepository) {
 		return args -> {
 			Role user = new Role (ERole.ROLE_USER);
 			Role mod = new Role (ERole.ROLE_MODERATOR);
 			Role admin = new Role (ERole.ROLE_ADMIN);
-			
+//			User template = new User();
 			
 			//pre insert role into db
 			roleRepository.saveAll(

@@ -32,17 +32,21 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		// we can use this in case we want to activate account after customer verified the account
 //		boolean enabled = !user.isAccountVerified();		
 		 UserDetails userDetail = UserDetailsImpl.withUsername(user.getEmail())
+				 	.id(user.getId())
 	                .password(user.getPassword())
 	                .disabled(user.isLoginDisabled())
 	                .authorities(getAuthorities(user)).build();
 
-	        return userDetail;
+	     return userDetail;
 		
 //		return UserDetailsImpl.build(user);
 	}
 	
-	 private Collection <GrantedAuthority> getAuthorities(User user){
+	 private Collection <GrantedAuthority> getAuthorities(User user) {
 	        Set <Role> userRoles = user.getRoles();
+//	        if (userRoles.isEmpty()) {
+//	        	throw new Exception("User has no role");
+//	        }
 	        Collection<GrantedAuthority> authorities = new ArrayList<>(userRoles.size());
 	        for(Role userRole : userRoles){
 	            authorities.add(new SimpleGrantedAuthority( (String) userRole.getName().name()));

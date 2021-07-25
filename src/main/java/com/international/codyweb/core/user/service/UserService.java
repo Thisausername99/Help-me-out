@@ -3,6 +3,7 @@ package com.international.codyweb.core.user.service;
 import com.international.codyweb.core.exception.InvalidTokenException;
 import com.international.codyweb.core.exception.ResourceNotFoundException;
 import com.international.codyweb.core.exception.UserAlreadyExistException;
+import com.international.codyweb.core.exception.UserNotVerifiedException;
 import com.international.codyweb.core.user.model.User;
 import com.international.codyweb.web.payload.request.SignupRequest;
 
@@ -12,6 +13,7 @@ public interface UserService {
     void sendRegistrationConfirmationEmail(final User user);
     boolean verifyUser(final String token) throws InvalidTokenException;
     		//throws InvalidTokenException;
+    boolean checkIfUserVerified(final String email) throws UserNotVerifiedException;
     User getUserById(final Long id) throws ResourceNotFoundException;
     		//throws UnkownIdentifierException;
 }

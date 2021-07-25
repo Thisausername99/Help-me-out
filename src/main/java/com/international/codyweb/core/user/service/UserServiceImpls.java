@@ -10,6 +10,8 @@ import javax.mail.MessagingException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
+
 //import org.springframework.data.domain.Example;
 //import org.springframework.data.domain.Page;
 //import org.springframework.data.domain.Pageable;
@@ -23,18 +25,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.international.codyweb.core.email.context.AccountVerificationEmailContext;
+import com.international.codyweb.core.security.token.service.VerificationTokenService;
 import com.international.codyweb.core.email.service.EmailService;
+
+
 import com.international.codyweb.core.exception.InvalidTokenException;
 import com.international.codyweb.core.exception.ResourceNotFoundException;
 import com.international.codyweb.core.exception.UserAlreadyExistException;
+import com.international.codyweb.core.exception.UserNotVerifiedException;
+
+
 import com.international.codyweb.core.security.token.model.VerificationToken;
-import com.international.codyweb.core.security.token.repository.VerificationTokenRepository;
-import com.international.codyweb.core.security.token.service.VerificationTokenService;
 import com.international.codyweb.core.user.ERole;
 import com.international.codyweb.core.user.model.Role;
 import com.international.codyweb.core.user.model.User;
+
+
+import com.international.codyweb.core.security.token.repository.VerificationTokenRepository;
 import com.international.codyweb.core.user.repository.RoleRepository;
 import com.international.codyweb.core.user.repository.UserRepository;
+
 import com.international.codyweb.web.payload.request.SignupRequest;
 
 @Service
@@ -173,8 +183,9 @@ public class UserServiceImpls implements UserService {
         }
         Optional <User> userOptional = userRepository.findById(verificationToken.getUser().getId());
         
-        if(Objects.isNull(userOptional)){
-            return false;
+        if(userOptional.isEmpty()){
+//        	throw new ResourceNotFoundException("User not exists for given token");
+        	return false;
         }
         
         User userEntity = userOptional.get();
@@ -199,6 +210,19 @@ public class UserServiceImpls implements UserService {
 	 private void encodePassword(SignupRequest source, User target){
 	        target.setPassword(passwordEncoder.encode(source.getPassword()));
 	 }
+
+	@Override
+	public boolean checkIfUserVerified(String email) throws UserNotVerifiedException {
+		Optional <User> userEntity = userRepository.findByEmail(email);
+		if (userEntity.isEmpty()) {
+			return false;
+		}
+		if (!userEntity.get().isAccountVerified()) {
+			throw new UserNotVerifiedException("User is not verified");
+			
+		}
+		return true;
+	}
     
     
 	

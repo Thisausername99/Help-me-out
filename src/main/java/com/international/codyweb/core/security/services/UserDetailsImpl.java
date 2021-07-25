@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
-//	private Long id;
+	private Long id;
 
 	@JsonIgnore
     private String password;
@@ -38,15 +38,15 @@ public class UserDetailsImpl implements UserDetails {
 
 //	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(String username, String password,
+	public UserDetailsImpl(Long id, String username, String password,
             Collection<? extends GrantedAuthority> authorities) {
-    this(username, password, true, true, true, true, authorities);
+    this(id, username, password, true, true, true, true, authorities);
 	}
 	
 	
 	//Constructor for MemberDetail to build auth object
 	
-	 public UserDetailsImpl(String username, String password, boolean enabled,
+	 public UserDetailsImpl(Long id, String username, String password, boolean enabled,
 			 			boolean accountNonExpired, boolean credentialsNonExpired,
 			 			boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
 
@@ -55,6 +55,7 @@ public class UserDetailsImpl implements UserDetails {
 	                 "Cannot pass null or empty values to constructor");
 	     }
 	
+	     this.id = id;
 	     this.username = username;
 	     this.password = password;
 	     this.enabled = enabled;
@@ -93,14 +94,15 @@ public class UserDetailsImpl implements UserDetails {
 		return authorities;
 	}
 
-//	public Long getId() {
-//		return id;
-//	}
+	public Long getId() {
+		return id;
+	}
 //
 //	public String getEmail() {
 //		return email;
 //	}
 
+	
 	public String getPassword() {
         return password;
     }
@@ -172,7 +174,8 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static class UserBuilder {
-        private String username;
+        private Long id;
+    	private String username;
         private String password;
         private List<GrantedAuthority> authorities;
         private boolean accountExpired;
@@ -202,6 +205,22 @@ public class UserDetailsImpl implements UserDetails {
             return this;
         }
 
+        
+        /**
+         * Populates the id. This attribute is required.
+         *
+         * @param user id.
+         * @return the {@link User.UserBuilder} for method chaining (i.e. to populate
+         * additional attributes for this user)
+         */
+        public UserDetailsImpl.UserBuilder id(Long id) {
+            Assert.notNull(id, "id cannot be null");
+            this.id = id;
+            return this;
+        }
+        
+        
+        
         /**
          * Populates the password. This attribute is required.
          *
@@ -365,7 +384,7 @@ public class UserDetailsImpl implements UserDetails {
         
         public UserDetails build() {
         	String encodedPassword = this.passwordEncoder.apply(password);
-            return new UserDetailsImpl(username, encodedPassword, !disabled, !accountExpired,
+            return new UserDetailsImpl(id, username, encodedPassword, !disabled, !accountExpired,
                     !credentialsExpired, !accountLocked, authorities);
         }
     }

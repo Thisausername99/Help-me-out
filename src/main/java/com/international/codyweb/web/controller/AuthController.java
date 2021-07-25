@@ -1,9 +1,7 @@
 package com.international.codyweb.web.controller;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.SendFailedException;
@@ -12,8 +10,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailSendException;
-import org.springframework.mail.SimpleMailMessage;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,16 +39,11 @@ import com.international.codyweb.core.exception.*;
 import com.international.codyweb.core.security.jwt.JwtUtils;
 import com.international.codyweb.core.security.services.UserDetailsImpl;
 import com.international.codyweb.core.security.token.model.RefreshToken;
-import com.international.codyweb.core.security.token.model.VerificationToken;
-import com.international.codyweb.core.security.token.repository.VerificationTokenRepository;
+
 import com.international.codyweb.core.security.token.service.RefreshTokenServiceImpls;
-import com.international.codyweb.core.email.service.EmailService;
 
 
-import com.international.codyweb.core.user.ERole;
-import com.international.codyweb.core.user.model.Role;
-import com.international.codyweb.core.user.model.User;
-import com.international.codyweb.core.user.repository.RoleRepository;
+
 import com.international.codyweb.core.user.service.UserService;
 
 
@@ -88,63 +80,48 @@ public class AuthController {
   
 	
 
-//	@PostMapping("/sign-in")
-//	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
-//		
-//		//Construct authentication object from login request payload and perform authentication
-//		Authentication authentication = authenticationManager.authenticate(
-//				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-//		
-//		//get the current security context object then set up the new authentication object (username, pw)
-//		SecurityContextHolder.getContext().setAuthentication(authentication);
-//		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();	
-//		
-//		//check if user has been verified
-//		if (!userService.userValidation(userDetails.getUsername())) {
-//			System.out.println("Here");
-//			return ResponseEntity
-//					.badRequest()
-//					.body(new MessageResponse("Error: User has not been verifed!"));
-//		}
-//		
-//		
-//		String jwt = jwtUtils.generateJwtToken(authentication);
-//		
-//		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-//			        .collect(Collectors.toList());
-//		
-//		RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-//		
-//		//Store user id for later use in parameter
-//		request.getSession().setAttribute("currentUser", userDetails.getId());
-//		
-//
-//		return ResponseEntity.ok(new JwtResponse(jwt, 
-//												 refreshToken.getId(), 
-//												 userDetails.getUsername(), 
-//												 userDetails.getEmail(), 
-//												 roles));
-//	}
+	@PostMapping("/sign-in")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) throws UserNotVerifiedException {
+		
+		//Encapsulate authentication object from login request payload and perform authentication
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		
+		//get the current security context object then set up the new authentication object (username, pw)
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();	
+		
+		//check if user has been verified
+		if (!userService.checkIfUserVerified(userDetails.getUsername())) {
+			throw new UserNotVerifiedException("User is not verified");
+		}
+		
+		
+		String jwt = jwtUtils.generateJwtToken(authentication);
+		
+//		Optional.ofNullable(listOfStuff)
+//        .orElseGet(Collections::emptyList)
+//        .stream()
+//        .filter(Objects::nonNull)
+//        .collect(Collectors.toList());
+		List<String> roles = Optional.ofNullable(userDetails.getAuthorities()).orElseGet(Collections::emptyList).stream().map(item -> item.getAuthority())
+			        .collect(Collectors.toList());
+		
+		RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+		
+		//Store user id for later use in parameter
+		request.getSession().setAttribute("currentUser", userDetails.getId());
+		
+
+		return ResponseEntity.ok(new JwtResponse(jwt, 
+												 refreshToken.getId(), 
+												 userDetails.getUsername(), 
+												 roles));
+	}
 
 	@PostMapping("/sign-up")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
-//		if (userService.usernameValidation(signUpRequest.getUsername())) {
-//			return ResponseEntity
-//					.badRequest()
-//					.body(new MessageResponse("Error: Username is already taken!"));
-//		}
-//
-//		if (userService.userEmailValidation(signUpRequest.getEmail())) {
-//			return ResponseEntity
-//					.badRequest()
-//					.body(new MessageResponse("Error: Email is already in use!"));
-//		}
-		
-		// Create new user's account
-		// set enable to be false for testing purpose
-//		User user = new User(signUpRequest.getUsername(), 
-//							 signUpRequest.getEmail(),
-//							 signUpRequest.getPassword());
+
 		try {
 			userService.register(signupRequest);
 		}
@@ -185,14 +162,7 @@ public class AuthController {
 //			});
 //		}
 //		
-//		//Step 2
-//		//generate new verification token
-//		VerificationToken verificationToken = new VerificationToken(user);
-//		verificationTokenRepository.save(verificationToken);
-//
-//		user.setRoles(roles);
-//		LOG.info("Saving the new employee to the redis.");
-//  		userService.saveUser(user);
+
 		
 		return ResponseEntity.ok(new MessageResponse("User registered"));
 		
