@@ -16,9 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 //import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.international.codyweb.core.email.context.AccountVerificationEmailContext;
 import com.international.codyweb.core.email.service.EmailService;
@@ -36,6 +38,7 @@ import com.international.codyweb.core.user.repository.UserRepository;
 import com.international.codyweb.web.payload.request.SignupRequest;
 
 @Service
+@Transactional
 public class UserServiceImpls implements UserService {
 	
     private final String USER_CACHE = "USER";
@@ -120,7 +123,7 @@ public class UserServiceImpls implements UserService {
         encodePassword(signupRequest, userEntity);
         updateUserRoles(userEntity);
         userRepository.save(userEntity);
-        System.out.println("GOT HERE");
+//        System.out.println("GOT HERE");
         sendRegistrationConfirmationEmail(userEntity);
 		
 	}
@@ -141,37 +144,45 @@ public class UserServiceImpls implements UserService {
 	public void sendRegistrationConfirmationEmail(User user) {
 		VerificationToken verificationToken = verificationTokenService.createVerificationToken();
 		verificationToken.setUser(user);
-		System.out.println(verificationToken.toString());
-		System.out.println(user.getEmail());
+		
+//		System.out.println(user.getEmail());
 		verificationTokenRepository.save(verificationToken);
         AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
         emailContext.init(user);
         emailContext.setToken(verificationToken.getToken());
         emailContext.buildVerificationUrl(baseURL, verificationToken.getToken());
-        try {
-            emailService.sendMail(emailContext);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        System.out.println(verificationToken.getToken());
+//        try {
+//        	System.out.println("Stuck here");
+//            emailService.sendMail(emailContext);
+//        } catch (MessagingException e) {
+//        	
+//            e.printStackTrace();
+//        }
 		
 	}
 
 	
 	
-	
+//	@Async
 	@Override
 	public boolean verifyUser(String token) throws InvalidTokenException {
 		VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
 		if(Objects.isNull(verificationToken) || !StringUtils.equals(token, verificationToken.getToken()) || verificationToken.isExpired()){
             throw new InvalidTokenException("Token is not valid");
         }
-        User user = userRepository.getOne(verificationToken.getUser().getId());
-        if(Objects.isNull(user)){
+        Optional <User> userOptional = userRepository.findById(verificationToken.getUser().getId());
+        
+        if(Objects.isNull(userOptional)){
             return false;
         }
-        user.setAccountVerified(true);
-        userRepository.save(user); // let's same user details
-
+        
+        User userEntity = userOptional.get();
+        userEntity.setAccountVerified(true);
+//        System.out.println(user.isAccountVerified()? "yes": "no");
+        userRepository.save(userEntity); // let's same user details
+        
+//        System.out.println(savedUser.getEmail());
         // we don't need invalid password now
         verificationTokenRepository.delete(verificationToken);
         return true;

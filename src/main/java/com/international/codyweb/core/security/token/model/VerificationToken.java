@@ -31,7 +31,9 @@ public class VerificationToken {
     private LocalDateTime expireAt;
     
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToOne(targetEntity = User.class) 
+    		//fetch = FetchType.EAGER)
+    		//, cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName ="id")
     private User user;
 

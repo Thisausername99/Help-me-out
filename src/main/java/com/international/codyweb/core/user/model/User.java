@@ -1,9 +1,7 @@
 package com.international.codyweb.core.user.model;
 
 //import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 //import javax.persistence.SequenceGenerator;

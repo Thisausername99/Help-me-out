@@ -115,6 +115,14 @@
     		<version>6.1.2.RELEASE</version>
   		</dependency>
 	
+	
+		<!--  For mailgun  -->
+		<dependency>
+    		<groupId>net.sargue</groupId>
+    		<artifactId>mailgun</artifactId>
+    		<version>1.10.0</version>
+		</dependency>
+	
 	</dependencies>
 	
 	

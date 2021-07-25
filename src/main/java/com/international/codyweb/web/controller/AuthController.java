@@ -149,9 +149,10 @@ public class AuthController {
 			userService.register(signupRequest);
 		}
 		catch (Exception e) {
+//			e.printStackTrace();
 			return ResponseEntity
 					.badRequest()
-					.body(new MessageResponse("Error: Email is taken!"));
+					.body(new MessageResponse("Error: " + e.getMessage()));
 		}
 //		Set<String> strRoles = signUpRequest.getRole();
 //		Set<Role> roles = new HashSet<>();
