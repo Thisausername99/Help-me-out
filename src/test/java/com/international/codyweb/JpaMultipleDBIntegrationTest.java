@@ -11,8 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.international.codyweb.core.user.model.User;
-import com.international.codyweb.core.user.repository.UserRepository;
+import com.international.codyweb.user.User;
+import com.international.codyweb.user.UserRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

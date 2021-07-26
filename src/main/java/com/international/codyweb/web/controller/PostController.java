@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.international.codyweb.core.exception.*;
-import com.international.codyweb.core.user.model.Post;
-import com.international.codyweb.core.user.repository.PostRepository;
-import com.international.codyweb.core.user.repository.UserRepository;
+import com.international.codyweb.exception.*;
+import com.international.codyweb.post.Post;
+import com.international.codyweb.post.PostRepository;
+import com.international.codyweb.user.UserRepository;
 
 @RestController
 @RequestMapping (path = "api/post")

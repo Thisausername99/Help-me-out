@@ -34,17 +34,13 @@ import com.international.codyweb.web.payload.request.TokenRefreshRequest;
 import com.international.codyweb.web.payload.response.JwtResponse;
 import com.international.codyweb.web.payload.response.MessageResponse;
 import com.international.codyweb.web.payload.response.TokenRefreshResponse;
-import com.international.codyweb.core.email.service.EmailSenderServiceImpl;
-import com.international.codyweb.core.exception.*;
-import com.international.codyweb.core.security.jwt.JwtUtils;
-import com.international.codyweb.core.security.services.UserDetailsImpl;
-import com.international.codyweb.core.security.token.model.RefreshToken;
-
-import com.international.codyweb.core.security.token.service.RefreshTokenServiceImpls;
-
-
-
-import com.international.codyweb.core.user.service.UserService;
+import com.international.codyweb.email.service.EmailSenderServiceImpl;
+import com.international.codyweb.exception.*;
+import com.international.codyweb.security.jwt.JwtUtils;
+import com.international.codyweb.security.services.UserDetailsImpl;
+import com.international.codyweb.security.token.model.RefreshToken;
+import com.international.codyweb.security.token.service.RefreshTokenServiceImpls;
+import com.international.codyweb.user.UserService;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -68,17 +64,6 @@ public class AuthController {
 	@Autowired
 	private JwtUtils jwtUtils;
 
-//	@Autowired
-//	private PasswordEncoder encoder;
-//
-//	@Autowired
-//	private RoleRepository roleRepository;
-//	
-//	@Autowired
-//    private VerificationTokenRepository verificationTokenRepository;
-
-  
-	
 
 	@PostMapping("/sign-in")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) throws UserNotVerifiedException {
@@ -92,18 +77,13 @@ public class AuthController {
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();	
 		
 		//check if user has been verified
-		if (!userService.checkIfUserVerified(userDetails.getUsername())) {
-			throw new UserNotVerifiedException("User is not verified");
-		}
+//		if (!userService.checkIfUserVerified(userDetails.getUsername())) {
+//			throw new UserNotVerifiedException("User is not verified");
+//		}
 		
 		
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		
-//		Optional.ofNullable(listOfStuff)
-//        .orElseGet(Collections::emptyList)
-//        .stream()
-//        .filter(Objects::nonNull)
-//        .collect(Collectors.toList());
 		List<String> roles = Optional.ofNullable(userDetails.getAuthorities()).orElseGet(Collections::emptyList).stream().map(item -> item.getAuthority())
 			        .collect(Collectors.toList());
 		
