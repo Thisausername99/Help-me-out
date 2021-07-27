@@ -12,7 +12,7 @@ public interface UserService {
 	void sendRegistrationConfirmationEmail(final User user);
 	boolean verifyUser(final String token) throws InvalidTokenException;
 	//throws InvalidTokenException;
-	boolean checkIfUserVerified(final String email) throws UserNotVerifiedException;
+	void checkIfUserVerified(final String email) throws UserNotVerifiedException;
 	User getUserById(final Long id) throws ResourceNotFoundException;
 	//throws UnkownIdentifierException;
 }

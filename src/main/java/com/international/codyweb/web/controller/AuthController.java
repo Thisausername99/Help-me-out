@@ -9,13 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
+
+
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,11 +38,16 @@ import com.international.codyweb.web.payload.request.TokenRefreshRequest;
 import com.international.codyweb.web.payload.response.JwtResponse;
 import com.international.codyweb.web.payload.response.MessageResponse;
 import com.international.codyweb.web.payload.response.TokenRefreshResponse;
-import com.international.codyweb.email.service.EmailSenderServiceImpl;
+
+
 import com.international.codyweb.exception.*;
+
+
 import com.international.codyweb.security.jwt.JwtUtils;
 import com.international.codyweb.security.services.UserDetailsImpl;
 import com.international.codyweb.security.token.model.RefreshToken;
+
+
 import com.international.codyweb.security.token.service.RefreshTokenServiceImpls;
 import com.international.codyweb.user.UserService;
 
@@ -77,9 +86,14 @@ public class AuthController {
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();	
 
 		//check if user has been verified
-		//		if (!userService.checkIfUserVerified(userDetails.getUsername())) {
-		//			throw new UserNotVerifiedException("User is not verified");
-		//		}
+		try {
+			userService.checkIfUserVerified(userDetails.getUsername());
+			
+		} catch (Exception e) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: " + e.getMessage()));	
+		}
 
 
 		String jwt = jwtUtils.generateJwtToken(authentication);
@@ -90,7 +104,11 @@ public class AuthController {
 		RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
 
 		//Store user id for later use in parameter
-		request.getSession().setAttribute("currentUser", userDetails.getId());
+		
+		
+		request.getSession().setAttribute("userId", userDetails.getId());
+		request.getSession().setAttribute("userName", userDetails.getUsername());
+		
 
 
 		return ResponseEntity.ok(new JwtResponse(jwt, 

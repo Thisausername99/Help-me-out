@@ -94,13 +94,13 @@ public class UserServiceImpls implements UserService {
 	//       return usr;
 	//    }
 
-	public Optional<User> findUserByEmail(final String email) {
-		return userRepository.findByEmail(email);
+	public User findUserByEmail(final String email) {
+		return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User is not found with email: " + email));
 	}
 
 
 	public User findUserByUsername(final String username) {
-		return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Error: User is not found.")); 
+		return userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User is not found with username: " + username)); 
 	}
 
 	// Find all employees' operation.
@@ -202,16 +202,11 @@ public class UserServiceImpls implements UserService {
 	}
 
 	@Override
-	public boolean checkIfUserVerified(String email) throws UserNotVerifiedException {
-		Optional <User> userEntity = userRepository.findByEmail(email);
-		if (userEntity.isEmpty()) {
-			return false;
-		}
-		if (!userEntity.get().isAccountVerified()) {
+	public void checkIfUserVerified(String email) throws UserNotVerifiedException {
+		User userEntity = findUserByEmail(email);
+		if (!userEntity.isAccountVerified()) {
 			throw new UserNotVerifiedException("User is not verified");
-
 		}
-		return true;
 	}
 
 

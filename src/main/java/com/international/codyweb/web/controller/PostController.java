@@ -59,7 +59,7 @@ public class PostController {
 	@PostMapping (path ="/create")
 	public ResponseEntity<Post> createPost(@Valid @RequestBody Post post, HttpServletRequest request){
 		//retrieve userId to add post create by user
-		Long userId = (Long) request.getSession().getAttribute("currentUser");
+		Long userId = (Long) request.getSession().getAttribute("userId");
 		//		System.out.printf("User id is %d", userId);
 		Post _post = postService.uploadPost(post, userId);
 		return new ResponseEntity<>(_post,HttpStatus.CREATED);	
