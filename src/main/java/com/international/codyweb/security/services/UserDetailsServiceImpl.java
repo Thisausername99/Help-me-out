@@ -26,7 +26,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	@Transactional
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByUsername(username)
+//		System.out.println(username);
+		User user = userRepository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 		
 		// we can use this in case we want to activate account after customer verified the account

@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 import lombok.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.international.codyweb.post.Post;
 import com.international.codyweb.role.Role;
 
@@ -51,13 +52,15 @@ public class User {
 	
 	
 	
-	//Member is parent of posts
-	@JsonIgnore
+	//User is parent of posts
+	@JsonManagedReference
+//	@JsonIgnore
 	@OneToMany(mappedBy = "user",fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<Post> posts = new HashSet<>();
 	
 	//Member can have many role and role can be assigned to many member
+	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(	name = "user_roles", 
 				joinColumns = @JoinColumn(name = "user_id"), 

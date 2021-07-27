@@ -6,6 +6,7 @@ import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.international.codyweb.user.User;
 
 
@@ -36,6 +37,7 @@ public class Post extends AuditModel{
     @Lob
     private String content;
 	
+	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -146,9 +148,11 @@ public class Post extends AuditModel{
 	}
 
 
-
-
-
+	
+	@Override
+	public String toString() {
+		return "Post [id=" + id + ", user=" + user + "]";
+	}
 	
 	
 }

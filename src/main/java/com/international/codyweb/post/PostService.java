@@ -15,7 +15,7 @@ public interface PostService {
 	
 	List <Post> getAllPosts();
 	List <Post> getPostByCategory(final String category);
-	void uploadPost (final Post post, final Long userId);
-	void updatePost (final Post post, final Long postId) throws ResourceNotFoundException;
+	Post uploadPost (final Post post, final Long userId);
+	Post updatePost (final Post post, final Long postId) throws ResourceNotFoundException;
 
 }
