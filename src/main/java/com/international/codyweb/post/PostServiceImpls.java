@@ -75,6 +75,7 @@ public class PostServiceImpls implements PostService {
 		try {
 
 			postRedisUtil.putMap(TABLE_POST, POST_ + postEntity.getId(), postEntity);
+			postRedisUtil.setExpire(TABLE_POST, 2, TimeUnit.MINUTES);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -94,6 +95,7 @@ public class PostServiceImpls implements PostService {
 		postRepository.save(postEntity);
 		try {
 			postRedisUtil.putMap(POST_, POST_ + postId, postEntity);
+			postRedisUtil.setExpire(TABLE_POST, 2, TimeUnit.MINUTES);
 		} catch (Exception e){
 			e.printStackTrace();
 		}

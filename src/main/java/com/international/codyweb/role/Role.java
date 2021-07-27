@@ -5,6 +5,7 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.international.codyweb.user.User;
 
 import lombok.*;
@@ -27,6 +28,7 @@ public class Role {
 	private ERole name;
 
 	@ManyToMany(mappedBy = "roles")
+	@JsonBackReference
     private Set <User> users;
 	
 	

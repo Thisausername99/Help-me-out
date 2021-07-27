@@ -1,5 +1,6 @@
 package com.international.codyweb.user;
 
+import java.io.Serializable;
 //import java.io.Serializable;
 import java.util.*;
 
@@ -13,7 +14,6 @@ import javax.validation.constraints.Size;
 
 import lombok.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.international.codyweb.post.Post;
 import com.international.codyweb.role.Role;
@@ -23,8 +23,8 @@ import com.international.codyweb.role.Role;
 @Entity
 @Table(name = "users")
 @Getter @Setter @NoArgsConstructor
-public class User {
-	//	private static final long serialVersionUID = 1L;
+public class User implements Serializable {
+	private static final long serialVersionUID = 2L;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long id;
@@ -89,7 +89,7 @@ public class User {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, password);
+		return Objects.hash(id, email);
 	}
 
 	@Override

@@ -1,8 +1,11 @@
 package com.international.codyweb.user;
 
 import java.util.*;
-import org.apache.commons.lang3.StringUtils;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
@@ -30,19 +33,25 @@ import com.international.codyweb.exception.InvalidTokenException;
 import com.international.codyweb.exception.ResourceNotFoundException;
 import com.international.codyweb.exception.UserAlreadyExistException;
 import com.international.codyweb.exception.UserNotVerifiedException;
+import com.international.codyweb.post.PostServiceImpls;
 import com.international.codyweb.role.ERole;
 import com.international.codyweb.role.Role;
 import com.international.codyweb.role.RoleRepository;
 import com.international.codyweb.security.token.model.VerificationToken;
 import com.international.codyweb.security.token.repository.VerificationTokenRepository;
 import com.international.codyweb.security.token.service.VerificationTokenService;
+import com.international.codyweb.util.RedisUtil;
 import com.international.codyweb.web.payload.request.SignupRequest;
 
 @Service
 @Transactional
 public class UserServiceImpls implements UserService {
 
-	private final String USER_CACHE = "USER";
+	private final String USER_ = "USER_";
+
+	private final String TABLE_USER = "TABLE_USER";
+
+	private static final Logger LOG = LoggerFactory.getLogger(PostServiceImpls.class);
 
 	@Autowired
 	private VerificationTokenService verificationTokenService;
@@ -62,9 +71,15 @@ public class UserServiceImpls implements UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-
+	@Autowired
+	private RedisUtil<User> userRedisUtil;
+	
 	@Value("${site.base.url.https}")
 	private String baseURL;
+	
+	
+	
+	
 	//    
 	//    @Autowired
 	//    RedisTemplate<String, Object> redisTemplate;
@@ -175,17 +190,27 @@ public class UserServiceImpls implements UserService {
 		Optional <User> userOptional = userRepository.findById(verificationToken.getUser().getId());
 
 		if(userOptional.isEmpty()){
-			//        	throw new ResourceNotFoundException("User not exists for given token");
 			return false;
 		}
 
 		User userEntity = userOptional.get();
 		userEntity.setAccountVerified(true);
 
+		
+		
 		userRepository.save(userEntity); // let's same user details
-
+		
 		// we don't need invalid password now
 		verificationTokenRepository.delete(verificationToken);
+		try {
+			userRedisUtil.putMap(TABLE_USER, USER_ + userEntity.getId(), userEntity);
+			userRedisUtil.setExpire(TABLE_USER, 2, TimeUnit.MINUTES);
+		} catch (Exception e) {
+//			System.out.println(userEntity.toString());
+			System.out.println(e.getCause());
+		}
+		
+		
 		return true;
 	}
 

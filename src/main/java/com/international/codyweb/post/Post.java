@@ -8,11 +8,12 @@ import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.international.codyweb.user.User;
-
+import lombok.*;
 
 @Entity
 @Table(name = "posts")
 
+@Getter @Setter @NoArgsConstructor
 public class Post extends AuditModel{
 
 	/**
@@ -45,14 +46,6 @@ public class Post extends AuditModel{
 
 
 
-
-	public Post() {
-	}
-
-
-
-
-
 	public Post(String title, String category, String content) {
 		this.title = title;
 		this.category = category;
@@ -60,70 +53,6 @@ public class Post extends AuditModel{
 	}
 
 
-
-
-
-	public Long getId() {
-		return id;
-	}
-
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-
-	public String getContent() {
-		return content;
-	}
-
-
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-
-	public String getTitle() {
-		return title;
-	}
-
-
-
-
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-
-
-
-
-	public String getCategory() {
-		return category;
-	}
-
-
-
-
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-
-
-	public User getUser() {
-		return user;
-	}
-
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 
 
