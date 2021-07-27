@@ -57,37 +57,22 @@ public class PostController {
 
 	/*Upload a post associate with a user */
 	@PostMapping (path ="/create")
-	//	@PathVariable (value = "userId") long userId,
 	public ResponseEntity<Post> createPost(@Valid @RequestBody Post post, HttpServletRequest request){
 		//retrieve userId to add post create by user
 		Long userId = (Long) request.getSession().getAttribute("currentUser");
 		//		System.out.printf("User id is %d", userId);
 		Post _post = postService.uploadPost(post, userId);
-		return new ResponseEntity<>(_post,HttpStatus.CREATED);
-		// find if user exist
-		// set user for post 
-		// save post to table
-		// return response entity with created status
-		// else throw error
-		//		return userRepository.findById(userId).map(user -> {
-		//            post.setUser(user);
-		//            Post _post = postRepository.save(post);
-		//            return new ResponseEntity<>(_post,HttpStatus.CREATED);
-		//        }).orElseThrow(() -> new ResourceNotFoundException("user not found"));
+		return new ResponseEntity<>(_post,HttpStatus.CREATED);	
 	}
 
 
-	//	@PutMapping("/update/{postId}")
-	//    public ResponseEntity<Post> updatePost(@PathVariable long postId, @Valid @RequestBody Post postRequest) {
-	//        
-	//		// get post from post table if found update field then save
-	//		// else throw error
-	//		return postRepository.findById(postId).map(post -> {
-	//            post.setTitle(postRequest.getTitle());
-	//            post.setCategory(postRequest.getCategory());
-	//            post.setContent(postRequest.getContent());
-	//            return new ResponseEntity<>(postRepository.save(post),HttpStatus.OK);
-	//        }).orElseThrow(() -> new ResourceNotFoundException("post not found with id "+ postId));
-	//	}
+	@PutMapping("/update/{postId}")
+	public ResponseEntity<Post> updatePost(@PathVariable long postId, @Valid @RequestBody Post postRequest) {
+		
+		Post _post = postService.updatePost(postId, postRequest);
+		// get post from post table if found update field then save
+		// else throw error
+		return new ResponseEntity<>(_post, HttpStatus.OK);
+	}
 
 }

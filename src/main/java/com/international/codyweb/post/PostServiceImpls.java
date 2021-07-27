@@ -4,26 +4,18 @@
 package com.international.codyweb.post;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.international.codyweb.CodyWebApplication;
 import com.international.codyweb.exception.ResourceNotFoundException;
 import com.international.codyweb.user.User;
-import com.international.codyweb.user.UserRepository;
 import com.international.codyweb.user.UserService;
 import com.international.codyweb.util.RedisUtil;
 
@@ -53,12 +45,14 @@ public class PostServiceImpls implements PostService {
 	UserService userService;
 
 
-
 	//@CachePut(value = "postCache", key = "#post.id")
 	@Override
 	public List <Post> getAllPosts() {
-		//		Map <Object, Post> redisCacheTable= postRedisUtil.getMapAsAll(TABLE_POST);
-		return postRepository.findAll();
+		List <Post> posts = postRepository.findAll();
+		posts.forEach(post ->  postRedisUtil.putMap(TABLE_POST, POST_ + post.getId(), post));
+		postRedisUtil.setExpire(TABLE_POST, 2, TimeUnit.MINUTES);
+		return posts;
+
 	}
 
 	//	@CachePut(value = "postCache", key = "#p0")
@@ -68,31 +62,43 @@ public class PostServiceImpls implements PostService {
 		return postRepository.findByCategory(category);
 	}
 
+
 	//	@CachePut(value = "postCache", key ="{ #root.methodName, #post.title }")
 	@Override
 	public Post uploadPost(Post post, Long userId) {
 		User userEntity = userService.getUserById(userId);
 		Post postEntity = new Post();
 		BeanUtils.copyProperties(post, postEntity);
+		
+		postEntity.setUser(userEntity);
+		postRepository.save(postEntity);
 		try {
 
-			postRedisUtil.putMap(TABLE_POST, POST_ + postEntity.getTitle(), postEntity);
+			postRedisUtil.putMap(TABLE_POST, POST_ + postEntity.getId(), postEntity);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		postEntity.setUser(userEntity);
-		postRepository.save(postEntity);
+		
 		LOG.warn(postEntity.toString());
 		return postEntity; 
 	}
 
 	//	@CachePut(value = "postCache", key = "#p0")
 	@Override
-	public Post updatePost(Post post, Long postId) throws ResourceNotFoundException {
+	public Post updatePost(Long postId, Post post) throws ResourceNotFoundException {
+		Post postEntity = postRepository.findById(postId)
+				.orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + postId));
 
-		return post;
-		// TODO Auto-generated method stub
+		BeanUtils.copyProperties(postEntity, post);
 
+		postRepository.save(postEntity);
+		try {
+			postRedisUtil.putMap(POST_, POST_ + postId, postEntity);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		LOG.warn(postEntity.toString());
+		return postEntity;
 	}
 
 }

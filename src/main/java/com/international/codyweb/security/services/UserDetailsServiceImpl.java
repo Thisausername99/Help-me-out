@@ -39,8 +39,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 				.authorities(getAuthorities(user)).build();
 
 		return userDetail;
-
-		//		return UserDetailsImpl.build(user);
 	}
 
 	private Collection <GrantedAuthority> getAuthorities(User user) {
