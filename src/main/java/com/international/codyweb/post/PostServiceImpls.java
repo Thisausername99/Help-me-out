@@ -41,7 +41,7 @@ public class PostServiceImpls implements PostService {
 	private final String TABLE_POST = "TABLE_POST";
 
 	private static final Logger LOG = LoggerFactory.getLogger(PostServiceImpls.class);
-	
+
 
 	@Autowired
 	private RedisUtil <Post> postRedisUtil;
@@ -57,25 +57,25 @@ public class PostServiceImpls implements PostService {
 	//@CachePut(value = "postCache", key = "#post.id")
 	@Override
 	public List <Post> getAllPosts() {
-//		Map <Object, Post> redisCacheTable= postRedisUtil.getMapAsAll(TABLE_POST);
+		//		Map <Object, Post> redisCacheTable= postRedisUtil.getMapAsAll(TABLE_POST);
 		return postRepository.findAll();
 	}
 
-//	@CachePut(value = "postCache", key = "#p0")
+	//	@CachePut(value = "postCache", key = "#p0")
 	@Override
 	public List <Post> getPostByCategory(String category) {
-		
+
 		return postRepository.findByCategory(category);
 	}
 
-//	@CachePut(value = "postCache", key ="{ #root.methodName, #post.title }")
+	//	@CachePut(value = "postCache", key ="{ #root.methodName, #post.title }")
 	@Override
 	public Post uploadPost(Post post, Long userId) {
 		User userEntity = userService.getUserById(userId);
 		Post postEntity = new Post();
 		BeanUtils.copyProperties(post, postEntity);
 		try {
-			
+
 			postRedisUtil.putMap(TABLE_POST, POST_ + postEntity.getTitle(), postEntity);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,7 +89,7 @@ public class PostServiceImpls implements PostService {
 	//	@CachePut(value = "postCache", key = "#p0")
 	@Override
 	public Post updatePost(Post post, Long postId) throws ResourceNotFoundException {
-		
+
 		return post;
 		// TODO Auto-generated method stub
 

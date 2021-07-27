@@ -14,7 +14,7 @@ import com.international.codyweb.user.User;
 @Table(name = "posts")
 
 public class Post extends AuditModel{
-	
+
 	/**
 	 * 
 	 */
@@ -22,37 +22,37 @@ public class Post extends AuditModel{
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long id;
-	
+
 	@NotNull
-    @Size(max = 100)
-    @Column(unique = true)
-    private String title;
-	
+	@Size(max = 100)
+	@Column(unique = true)
+	private String title;
+
 	@NotNull
 	@Size(max = 250)
 	private String category;
-	
-	
+
+
 	@NotNull
-    @Lob
-    private String content;
-	
+	@Lob
+	private String content;
+
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-	
-	
-	
-	
-	
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
+
+
+
+
+
 	public Post() {
 	}
 
-	
 
-	
-	
+
+
+
 	public Post(String title, String category, String content) {
 		this.title = title;
 		this.category = category;
@@ -60,8 +60,8 @@ public class Post extends AuditModel{
 	}
 
 
-	
-	
+
+
 
 	public Long getId() {
 		return id;
@@ -115,7 +115,7 @@ public class Post extends AuditModel{
 	}
 
 
-	
+
 	public User getUser() {
 		return user;
 	}
@@ -124,9 +124,9 @@ public class Post extends AuditModel{
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
-	
+
+
+
 
 	@Override
 	public int hashCode() {
@@ -148,11 +148,11 @@ public class Post extends AuditModel{
 	}
 
 
-	
+
 	@Override
 	public String toString() {
 		return "Post [id=" + id + ", user=" + user + "]";
 	}
-	
-	
+
+
 }

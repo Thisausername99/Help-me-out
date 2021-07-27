@@ -23,39 +23,29 @@ public class EmailSenderServiceImpl implements EmailService{
 	private JavaMailSender emailSender;
 
 	@Autowired
-    private SpringTemplateEngine templateEngine;
-	
-    @Autowired
-    public EmailSenderServiceImpl(JavaMailSender emailSender) {
-        this.emailSender = emailSender;
-    }
+	private SpringTemplateEngine templateEngine;
 
-   
-//    public void sendEmail(SimpleMailMessage email, String userEmail, String token) {
-//    	email.setTo(userEmail);
-//    	email.setSubject("Complete Registration!");
-//    	email.setFrom("chand312902@gmail.com");
-//    	email.setText("To confirm your account, please click here : "
-//        +"http://localhost:8082/confirm-account?token="+ token);
-//    	
-//    	javaMailSender.send(email);
-//    }
-	
-    @Override
-    @Async
-    public void sendMail(AbstractEmailContext email) throws MessagingException {
-        MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message,
-                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                StandardCharsets.UTF_8.name());
-        Context context = new Context();
-        context.setVariables(email.getContext());
-        String emailContent = templateEngine.process(email.getTemplateLocation(), context);
+	@Autowired
+	public EmailSenderServiceImpl(JavaMailSender emailSender) {
+		this.emailSender = emailSender;
+	}
 
-        mimeMessageHelper.setTo(email.getTo());
-        mimeMessageHelper.setSubject(email.getSubject());
-        mimeMessageHelper.setFrom(email.getFrom());
-        mimeMessageHelper.setText(emailContent, true);
-        emailSender.send(message);
-    }
+
+	@Override
+	@Async
+	public void sendMail(AbstractEmailContext email) throws MessagingException {
+		MimeMessage message = emailSender.createMimeMessage();
+		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message,
+				MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+				StandardCharsets.UTF_8.name());
+		Context context = new Context();
+		context.setVariables(email.getContext());
+		String emailContent = templateEngine.process(email.getTemplateLocation(), context);
+
+		mimeMessageHelper.setTo(email.getTo());
+		mimeMessageHelper.setSubject(email.getSubject());
+		mimeMessageHelper.setFrom(email.getFrom());
+		mimeMessageHelper.setText(emailContent, true);
+		emailSender.send(message);
+	}
 }

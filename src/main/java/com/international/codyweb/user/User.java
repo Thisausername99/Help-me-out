@@ -22,76 +22,71 @@ import com.international.codyweb.role.Role;
 
 @Entity
 @Table(name = "users")
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor
 public class User {
-//	private static final long serialVersionUID = 1L;
-	
+	//	private static final long serialVersionUID = 1L;
+
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long id;
-	
-	
+
+
 	@NotBlank
 	@Size(max = 20)
 	private String username;
 
-	
+
 	@NotEmpty
 	@Email
 	@Column(unique = true)
 	private String email;
-	
+
 	@NotEmpty
 	private String password;
-	
+
 
 	private boolean accountVerified;
-	 
+
 	private int failedLoginAttempts;
-	 
+
 	private boolean loginDisabled;
-	
-	
-	
+
+
+
 	//User is parent of posts
 	@JsonManagedReference
-//	@JsonIgnore
+	//	@JsonIgnore
 	@OneToMany(mappedBy = "user",fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private Set<Post> posts = new HashSet<>();
-	
+	cascade = CascadeType.ALL)
+	private Set<Post> posts = new HashSet<>();
+
 	//Member can have many role and role can be assigned to many member
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(	name = "user_roles", 
-				joinColumns = @JoinColumn(name = "user_id"), 
-				inverseJoinColumns = @JoinColumn(name = "role_id"))
+	joinColumns = @JoinColumn(name = "user_id"), 
+	inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
-	
-	
-	public User() {
-		super();
-	}
-	
+
 	public User(String username, String email, String password) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		
-	}
-	
-	public void addUserRoles(Role role){
-        roles.add(role);
-        role.getUsers().add(this);
-    }
 
-    public void removeUserRoles(Role role){
-        roles.remove(role);
-        role.getUsers().remove(this);
-    }
-	
-	
-	
+	}
+
+	public void addUserRoles(Role role){
+		roles.add(role);
+		role.getUsers().add(this);
+	}
+
+	public void removeUserRoles(Role role){
+		roles.remove(role);
+		role.getUsers().remove(this);
+	}
+
+
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(email, password);
@@ -108,5 +103,5 @@ public class User {
 		User other = (User) obj;
 		return Objects.equals(email, other.email) && Objects.equals(password, other.password);
 	}
-	
+
 }

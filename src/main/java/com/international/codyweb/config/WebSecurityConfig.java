@@ -41,45 +41,45 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
 
-	
-//	@Autowired
-//	PasswordEncoder passwordEncoder;
 
-	
+	//	@Autowired
+	//	PasswordEncoder passwordEncoder;
+
+
 	@Bean
 	public AuthTokenFilter authenticationJwtTokenFilter() {
 		return new AuthTokenFilter();
 	}
 
-	
-	
+
+
 	/**
-     * DAO authentication provider. This authentication provider will authenticate the user with the help of
-     * @UserdetailsService. This is based on the validating the user with the username and password.
-     * @return
-     */
-    @Bean
-    public DaoAuthenticationProvider authProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        authenticationProvider.setUserDetailsService(userDetailsService);
-        return authenticationProvider;
-    }
-	
-	
+	 * DAO authentication provider. This authentication provider will authenticate the user with the help of
+	 * @UserdetailsService. This is based on the validating the user with the username and password.
+	 * @return
+	 */
+	@Bean
+	public DaoAuthenticationProvider authProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setPasswordEncoder(passwordEncoder());
+		authenticationProvider.setUserDetailsService(userDetailsService);
+		return authenticationProvider;
+	}
+
+
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder.authenticationProvider(authProvider());
 		//userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
-	
+
+
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -87,51 +87,51 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 
-	
-	@Bean
-    public SessionRegistry sessionRegistry() {
-        SessionRegistry sessionRegistry = new SessionRegistryImpl();
-        return sessionRegistry;
-    }
 
-	
-    /**
-     * We need this bean for the session management. Specially if we want to control the concurrent session-control support
-     * with Spring security.
-     * @return
-     */
-    @Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher(){
-        return new HttpSessionEventPublisher();
-    }
-	
-	
-	
-	
-	
+	@Bean
+	public SessionRegistry sessionRegistry() {
+		SessionRegistry sessionRegistry = new SessionRegistryImpl();
+		return sessionRegistry;
+	}
+
+
+	/**
+	 * We need this bean for the session management. Specially if we want to control the concurrent session-control support
+	 * with Spring security.
+	 * @return
+	 */
+	@Bean
+	public HttpSessionEventPublisher httpSessionEventPublisher(){
+		return new HttpSessionEventPublisher();
+	}
+
+
+
+
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
-			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.authorizeRequests()
-			.antMatchers("/api/post/**").permitAll()
-			.antMatchers("/api/auth/**").permitAll()
-			.antMatchers("/api/test/**").permitAll()
-			.antMatchers("/console/**").permitAll()
-			.anyRequest().authenticated();
-			
+		.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+		.authorizeRequests()
+		.antMatchers("/api/post/**").permitAll()
+		.antMatchers("/api/auth/**").permitAll()
+		.antMatchers("/api/test/**").permitAll()
+		.antMatchers("/console/**").permitAll()
+		.anyRequest().authenticated();
+
 		http.headers().frameOptions().disable();
-//		  http
-//	        .logout(logout -> logout                                                
-//	            .logoutUrl("/my/logout")                                            
-//	            .logoutSuccessUrl("/home")                                      
-//	            .logoutSuccessHandler(logoutSuccessHandler)                         
-//	            .invalidateHttpSession(true)                                        
-//	            .addLogoutHandler(logoutHandler)                                    
-//	            .deleteCookies(cookieNamesToClear)                                  
-//	        );
-		
+		//		  http
+		//	        .logout(logout -> logout                                                
+		//	            .logoutUrl("/my/logout")                                            
+		//	            .logoutSuccessUrl("/home")                                      
+		//	            .logoutSuccessHandler(logoutSuccessHandler)                         
+		//	            .invalidateHttpSession(true)                                        
+		//	            .addLogoutHandler(logoutHandler)                                    
+		//	            .deleteCookies(cookieNamesToClear)                                  
+		//	        );
+
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 }

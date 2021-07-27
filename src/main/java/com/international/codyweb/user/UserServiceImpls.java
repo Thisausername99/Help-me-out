@@ -41,101 +41,101 @@ import com.international.codyweb.web.payload.request.SignupRequest;
 @Service
 @Transactional
 public class UserServiceImpls implements UserService {
-	
-    private final String USER_CACHE = "USER";
-    
-    @Autowired
-    private VerificationTokenService verificationTokenService;
-    
+
+	private final String USER_CACHE = "USER";
+
+	@Autowired
+	private VerificationTokenService verificationTokenService;
+
 	@Autowired
 	private EmailService emailService;
-    
-    @Autowired
-    private VerificationTokenRepository verificationTokenRepository;
-    
-    @Autowired
-    private UserRepository userRepository;
-    
-    @Autowired
-    private RoleRepository roleRepository;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    
-    
-    @Value("${site.base.url.https}")
-    private String baseURL;
-//    
-//    @Autowired
-//    RedisTemplate<String, Object> redisTemplate;
-//    private HashOperations<String, Long, User> hashOperations;
-	
-    
-    
-    
-//    // This annotation makes sure that the method needs to be executed after 
-//    // dependency injection is done to perform any initialization.
-//    @PostConstruct
-//    private void intializeHashOperations() {
-//        hashOperations = redisTemplate.opsForHash();
-//    }
-	
-    //save to redis first then db
-//    public void saveUser(final User user) {
-//        userRepository.save(user);
-//    }
-//        
-    
-//    public User findUserById(final Long id) {
-//       User usr =  (User) hashOperations.get(USER_CACHE, id);
-//       if (usr == null) {
-//    	   return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Error: User is not found."));
-//       }
-//       return usr;
-//    }
-    
-    public Optional<User> findUserByEmail(final String email) {
-    	return userRepository.findByEmail(email);
-    }
-    
-    
-    public User findUserByUsername(final String username) {
-       return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Error: User is not found.")); 
-     }
-  
-    // Find all employees' operation.
-//    public Map<Long, User> findAllUser() {
-//        return hashOperations.entries(USER_CACHE);
-//    }
- 
-    // Delete employee by id operation.
-    public void delete(Long id) {
-//        hashOperations.delete(USER_CACHE, id);
-        userRepository.deleteById(id);
-    }
+
+	@Autowired
+	private VerificationTokenRepository verificationTokenRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private RoleRepository roleRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+
+	@Value("${site.base.url.https}")
+	private String baseURL;
+	//    
+	//    @Autowired
+	//    RedisTemplate<String, Object> redisTemplate;
+	//    private HashOperations<String, Long, User> hashOperations;
+
+
+
+
+	//    // This annotation makes sure that the method needs to be executed after 
+	//    // dependency injection is done to perform any initialization.
+	//    @PostConstruct
+	//    private void intializeHashOperations() {
+	//        hashOperations = redisTemplate.opsForHash();
+	//    }
+
+	//save to redis first then db
+	//    public void saveUser(final User user) {
+	//        userRepository.save(user);
+	//    }
+	//        
+
+	//    public User findUserById(final Long id) {
+	//       User usr =  (User) hashOperations.get(USER_CACHE, id);
+	//       if (usr == null) {
+	//    	   return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+	//       }
+	//       return usr;
+	//    }
+
+	public Optional<User> findUserByEmail(final String email) {
+		return userRepository.findByEmail(email);
+	}
+
+
+	public User findUserByUsername(final String username) {
+		return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Error: User is not found.")); 
+	}
+
+	// Find all employees' operation.
+	//    public Map<Long, User> findAllUser() {
+	//        return hashOperations.entries(USER_CACHE);
+	//    }
+
+	// Delete employee by id operation.
+	public void delete(Long id) {
+		//        hashOperations.delete(USER_CACHE, id);
+		userRepository.deleteById(id);
+	}
 
 	@Override
 	public void register(SignupRequest signupRequest) throws UserAlreadyExistException{
 		if(checkIfUserExist(signupRequest.getEmail())){
-            throw new UserAlreadyExistException("User already exists for this email");
-        }
-        User userEntity = new User();
-        BeanUtils.copyProperties(signupRequest, userEntity);
-        encodePassword(signupRequest, userEntity);
-        updateUserRoles(userEntity);
-        userRepository.save(userEntity);
-//        System.out.println("GOT HERE");
-        sendRegistrationConfirmationEmail(userEntity);
-		
+			throw new UserAlreadyExistException("User already exists for this email");
+		}
+		User userEntity = new User();
+		BeanUtils.copyProperties(signupRequest, userEntity);
+		encodePassword(signupRequest, userEntity);
+		updateUserRoles(userEntity);
+		userRepository.save(userEntity);
+		//        System.out.println("GOT HERE");
+		sendRegistrationConfirmationEmail(userEntity);
+
 	}
 
-	
+
 	private void updateUserRoles(User user){ 
-        Role userRole= roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found."));;
-        user.addUserRoles(userRole);
-    }
-	
-	
+		Role userRole= roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found."));;
+		user.addUserRoles(userRole);
+	}
+
+
 	@Override
 	public boolean checkIfUserExist(String email) {
 		return userRepository.existsByEmail(email);
@@ -145,61 +145,61 @@ public class UserServiceImpls implements UserService {
 	public void sendRegistrationConfirmationEmail(User user) {
 		VerificationToken verificationToken = verificationTokenService.createVerificationToken();
 		verificationToken.setUser(user);
-		
-//		System.out.println(user.getEmail());
+
+		//		System.out.println(user.getEmail());
 		verificationTokenRepository.save(verificationToken);
-        AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
-        emailContext.init(user);
-        emailContext.setToken(verificationToken.getToken());
-        emailContext.buildVerificationUrl(baseURL, verificationToken.getToken());
-        System.out.println(verificationToken.getToken());
-//        try {
-//        	System.out.println("Stuck here");
-//            emailService.sendMail(emailContext);
-//        } catch (MessagingException e) {
-//        	
-//            e.printStackTrace();
-//        }
-		
+		AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
+		emailContext.init(user);
+		emailContext.setToken(verificationToken.getToken());
+		emailContext.buildVerificationUrl(baseURL, verificationToken.getToken());
+		System.out.println(verificationToken.getToken());
+		//        try {
+		//        	System.out.println("Stuck here");
+		//            emailService.sendMail(emailContext);
+		//        } catch (MessagingException e) {
+		//        	
+		//            e.printStackTrace();
+		//        }
+
 	}
 
-	
-	
-//	@Async
+
+
+	//	@Async
 	@Override
 	public boolean verifyUser(String token) throws InvalidTokenException {
 		VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
 		if(Objects.isNull(verificationToken) || !StringUtils.equals(token, verificationToken.getToken()) || verificationToken.isExpired()){
-            throw new InvalidTokenException("Token is not valid");
-        }
-        Optional <User> userOptional = userRepository.findById(verificationToken.getUser().getId());
-        
-        if(userOptional.isEmpty()){
-//        	throw new ResourceNotFoundException("User not exists for given token");
-        	return false;
-        }
-        
-        User userEntity = userOptional.get();
-        userEntity.setAccountVerified(true);
+			throw new InvalidTokenException("Token is not valid");
+		}
+		Optional <User> userOptional = userRepository.findById(verificationToken.getUser().getId());
 
-        userRepository.save(userEntity); // let's same user details
-        
-        // we don't need invalid password now
-        verificationTokenRepository.delete(verificationToken);
-        return true;
+		if(userOptional.isEmpty()){
+			//        	throw new ResourceNotFoundException("User not exists for given token");
+			return false;
+		}
+
+		User userEntity = userOptional.get();
+		userEntity.setAccountVerified(true);
+
+		userRepository.save(userEntity); // let's same user details
+
+		// we don't need invalid password now
+		verificationTokenRepository.delete(verificationToken);
+		return true;
 	}
 
-	
-	
+
+
 	@Override
 	public User getUserById(Long id) throws ResourceNotFoundException {
 		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Error: User is not found."));
 	}
-    
-    
-	 private void encodePassword(SignupRequest source, User target){
-	        target.setPassword(passwordEncoder.encode(source.getPassword()));
-	 }
+
+
+	private void encodePassword(SignupRequest source, User target){
+		target.setPassword(passwordEncoder.encode(source.getPassword()));
+	}
 
 	@Override
 	public boolean checkIfUserVerified(String email) throws UserNotVerifiedException {
@@ -209,12 +209,12 @@ public class UserServiceImpls implements UserService {
 		}
 		if (!userEntity.get().isAccountVerified()) {
 			throw new UserNotVerifiedException("User is not verified");
-			
+
 		}
 		return true;
 	}
-    
-    
-	
+
+
+
 
 }

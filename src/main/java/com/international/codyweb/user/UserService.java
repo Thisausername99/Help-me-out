@@ -8,11 +8,11 @@ import com.international.codyweb.web.payload.request.SignupRequest;
 
 public interface UserService {
 	void register(final SignupRequest signupRequest) throws UserAlreadyExistException;
-    boolean checkIfUserExist(final String email);
-    void sendRegistrationConfirmationEmail(final User user);
-    boolean verifyUser(final String token) throws InvalidTokenException;
-    		//throws InvalidTokenException;
-    boolean checkIfUserVerified(final String email) throws UserNotVerifiedException;
-    User getUserById(final Long id) throws ResourceNotFoundException;
-    		//throws UnkownIdentifierException;
+	boolean checkIfUserExist(final String email);
+	void sendRegistrationConfirmationEmail(final User user);
+	boolean verifyUser(final String token) throws InvalidTokenException;
+	//throws InvalidTokenException;
+	boolean checkIfUserVerified(final String email) throws UserNotVerifiedException;
+	User getUserById(final Long id) throws ResourceNotFoundException;
+	//throws UnkownIdentifierException;
 }

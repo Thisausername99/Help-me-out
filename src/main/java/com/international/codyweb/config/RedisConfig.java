@@ -4,17 +4,14 @@
 package com.international.codyweb.config;
 
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
-import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
-import java.lang.reflect.Method;
 import java.time.Duration;
 
 import static org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
@@ -28,7 +25,7 @@ import static org.springframework.data.redis.serializer.RedisSerializationContex
 @Configuration
 @EnableRedisHttpSession
 public class RedisConfig {
-	
+
 	//First option to configure redis => recently introduce in new spring boot
 	@Bean
 	public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
@@ -48,7 +45,7 @@ public class RedisConfig {
 	}
 
 
-	
+
 	//Second option to configure redis (older method) 
 	@Bean
 	public LettuceConnectionFactory redisConnectionFactory() {
@@ -56,8 +53,8 @@ public class RedisConfig {
 	}
 
 	//Setting up the Redis template object.
-	
-	
+
+
 	@Bean
 	public RedisTemplate<String, Object> redisTemplate() {
 		final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();

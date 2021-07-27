@@ -21,41 +21,41 @@ import com.international.codyweb.user.UserRepository;
 public class UserDetailsServiceImpl implements UserDetailsService{
 	@Autowired
 	UserRepository userRepository;
-	
+
 	//Build user authentication object
 	@Transactional
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//		System.out.println(username);
+		//		System.out.println(username);
 		User user = userRepository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-		
+
 		// we can use this in case we want to activate account after customer verified the account
-//		boolean enabled = !user.isAccountVerified();		
-		 UserDetails userDetail = UserDetailsImpl.withUsername(user.getEmail())
-				 	.id(user.getId())
-	                .password(user.getPassword())
-	                .disabled(user.isLoginDisabled())
-	                .authorities(getAuthorities(user)).build();
+		//		boolean enabled = !user.isAccountVerified();		
+		UserDetails userDetail = UserDetailsImpl.withUsername(user.getEmail())
+				.id(user.getId())
+				.password(user.getPassword())
+				.disabled(user.isLoginDisabled())
+				.authorities(getAuthorities(user)).build();
 
-	     return userDetail;
-		
-//		return UserDetailsImpl.build(user);
+		return userDetail;
+
+		//		return UserDetailsImpl.build(user);
 	}
-	
-	 private Collection <GrantedAuthority> getAuthorities(User user) {
-	        Set <Role> userRoles = user.getRoles();
-//	        if (userRoles.isEmpty()) {
-//	        	throw new Exception("User has no role");
-//	        }
-	        Collection<GrantedAuthority> authorities = new ArrayList<>(userRoles.size());
-	        for(Role userRole : userRoles){
-	            authorities.add(new SimpleGrantedAuthority( (String) userRole.getName().name()));
-	        }
 
-	        return authorities;
-	    }
-	
-	
+	private Collection <GrantedAuthority> getAuthorities(User user) {
+		Set <Role> userRoles = user.getRoles();
+		//	        if (userRoles.isEmpty()) {
+		//	        	throw new Exception("User has no role");
+		//	        }
+		Collection<GrantedAuthority> authorities = new ArrayList<>(userRoles.size());
+		for(Role userRole : userRoles){
+			authorities.add(new SimpleGrantedAuthority( (String) userRole.getName().name()));
+		}
+
+		return authorities;
+	}
+
+
 
 }
