@@ -1,0 +1,8 @@
+{
+	"spring.datasource.username": "postgres",
+	"spring.datasource.password": "cody3399",
+	"spring.mail.username": "codyhoang99@gmail.com",
+	"spring.mail.password":"Cody!3399"
+	
+	
+}
