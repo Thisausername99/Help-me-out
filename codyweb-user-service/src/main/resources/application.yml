@@ -23,15 +23,15 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   
   security:    oauth2:      resourceserver:        jwt:          issuer-uri: http://localhost:8089/auth/realms/codyweb
-  cloud:
-    vault:
-      host: localhost
-      port: 8288
-      scheme: http
-      authentication: TOKEN
-      token: s.1eJL6HWOX3kUe4c38z9ZjDQB
-      application-name: user-service
-      
+#  cloud:
+#    vault:
+#      host: localhost
+#      port: 8200
+#      scheme: http
+#      authentication: TOKEN
+#      token: s.1eJL6HWOX3kUe4c38z9ZjDQB
+#      application-name: user-service
+#      
   
   
 server:
