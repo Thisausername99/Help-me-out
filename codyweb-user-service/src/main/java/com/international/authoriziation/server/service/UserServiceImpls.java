@@ -91,12 +91,7 @@ public class UserServiceImpls implements UserService {
 	@Value("${cody.app.base.url}")
 	private String baseURL;
 
-
-
-
-
-
-	//    
+    
 	//    @Autowired
 	//    RedisTemplate<String, Object> redisTemplate;
 	//    private HashOperations<String, Long, User> hashOperations;
