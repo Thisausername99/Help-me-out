@@ -1,10 +1,6 @@
 package com.international.authoriziation.server.controller;
 
-import java.util.*;
-import java.util.stream.*;
 
-import javax.mail.AuthenticationFailedException;
-import javax.mail.SendFailedException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -22,8 +18,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.CrossOrigin;
+//import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,13 +32,14 @@ import org.slf4j.LoggerFactory;
 
 import com.international.authoriziation.server.auth.UserDetailsImpl;
 import com.international.authoriziation.server.exception.UserNotVerifiedException;
-import com.international.authoriziation.server.jwt.JwtUtils;
+//import com.international.authoriziation.server.jwt.JwtUtils;
 import com.international.authoriziation.server.model.dto.LoginRequest;
 import com.international.authoriziation.server.model.dto.MessageResponse;
 import com.international.authoriziation.server.model.dto.SignupRequest;
 //import com.international.authoriziation.server.model.dto.User;
 //import com.international.authoriziation.server.service.KeycloakUserService;
 import com.international.authoriziation.server.service.UserService;
+//import com.international.authoriziation.server.token.pojo.VerificationToken;
 
 
 
@@ -150,38 +147,22 @@ public class AuthController {
 	}
 //
 //
-//	@PostMapping(value="/confirm-account")
-//	public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String verificationToken){
-//		//        VerificationToken token = verificationTokenRepository.findByToken(verificationToken);
-//		try {
-//			userService.verifyUser(verificationToken);
-//		} catch (Exception e) {
-//			return ResponseEntity
-//					.badRequest()
-//					.body(new MessageResponse("Error: Token is invalid!"));
-//			//          redirAttr.addFlashAttribute("tokenError", messageSource.getMessage("user.registration.verification.invalid.token", null,LocaleContextHolder.getLocale()));
-//			//          return REDIRECT_LOGIN;
-//		}
-//
-//		//      redirAttr.addFlashAttribute("verifiedAccountMsg", messageSource.getMessage("user.registration.verification.success", null,LocaleContextHolder.getLocale()));
-//		//      return REDIRECT_LOGIN;
-//
-//		//        if(token != null){
-//		//            User user = userService.findUserByEmail(token.getUser().getEmail()).
-//		//            		orElseThrow(() -> new ResourceNotFoundException("user not found with token" + token));
-//		//            user.setEnabled(true);
-//		//            userService.saveUser(user);        
-//		//        }
-//		//        else {
-//		//        	return ResponseEntity
-//		//					.badRequest()
-//		//					.body(new MessageResponse("Error: Token is invalid!"));
-//		////        	modelAndView.addObject("message","The link is invalid or broken!");
-//		////          modelAndView.setViewName("error");
-//		//        }
-//
-//		return ResponseEntity.ok(new MessageResponse("User successfully verified!"));
-//	}
+	@PostMapping(value="/confirm-account")
+	public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String verificationToken){
+		try {
+			userService.verifyUser(verificationToken);
+		} catch (Exception e) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Token is invalid!"));
+			//          redirAttr.addFlashAttribute("tokenError", messageSource.getMessage("user.registration.verification.invalid.token", null,LocaleContextHolder.getLocale()));
+			//          return REDIRECT_LOGIN;
+		}
+
+		//      redirAttr.addFlashAttribute("verifiedAccountMsg", messageSource.getMessage("user.registration.verification.success", null,LocaleContextHolder.getLocale()));
+		//      return REDIRECT_LOGIN;
+		return ResponseEntity.ok(new MessageResponse("User successfully verified!"));
+	}
 //
 //
 //

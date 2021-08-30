@@ -123,10 +123,6 @@ public class UserServiceImpls implements UserService {
 	}
 
 
-//	public UserEntity findUserByUsername(final String username) {
-//		return userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User is not found with username: " + username)); 
-//	}
-
 	public UserEntity findById(Long id) throws ResourceNotFoundException {
 		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Error: User is not found."));
 	}
@@ -183,13 +179,13 @@ public class UserServiceImpls implements UserService {
 		emailContext.setToken(verificationToken.getToken());
 		emailContext.buildVerificationUrl(baseURL, verificationToken.getToken());
 		System.out.println(verificationToken.getToken());
-		try {
-			System.out.println("Stuck here");
-			emailService.sendMail(emailContext);
-		} catch (MessagingException e) {
-
-			e.printStackTrace();
-		}
+//		try {
+//			System.out.println("Stuck here");
+//			emailService.sendMail(emailContext);
+//		} catch (MessagingException e) {
+//
+//			e.printStackTrace();
+//		}
 
 	}
 
