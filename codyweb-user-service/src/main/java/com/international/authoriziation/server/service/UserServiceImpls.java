@@ -56,12 +56,12 @@ public class UserServiceImpls implements UserService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpls.class);
 
+	private UserMapper userMapper = new UserMapper();
+	
 	@Autowired
 	private EmailService emailService;
 
-	//	@Autowired
-	//	private KeycloakUserService keycloakUserService;
-	private UserMapper userMapper = new UserMapper();
+	
 
 
 	@Autowired
