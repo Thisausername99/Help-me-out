@@ -13,14 +13,18 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import com.international.codyweb.exception.ResourceNotFoundException;
+import com.international.codyweb.model.dto.PostDto;
 import com.international.codyweb.model.entity.PostEntity;
 import com.international.codyweb.model.entity.UserEntity;
+import com.international.codyweb.model.mapper.PostMapper;
 import com.international.codyweb.model.repository.PostRepository;
 import com.international.codyweb.model.repository.UserRepository;
 import com.international.codyweb.util.RedisUtil;
+
+import lombok.AllArgsConstructor;
 
 /**
  * @author Cody Hoang
@@ -28,6 +32,7 @@ import com.international.codyweb.util.RedisUtil;
  */
 @Service
 @Transactional
+@AllArgsConstructor
 public class PostServiceImpls implements PostService {
 
 
@@ -36,10 +41,11 @@ public class PostServiceImpls implements PostService {
 	private final String TABLE_POST = "TABLE_POST";
 
 	private static final Logger LOG = LoggerFactory.getLogger(PostServiceImpls.class);
+	
+	private final PostMapper postMapper;
 
-
-	@Autowired
-	private RedisUtil <PostEntity> postRedisUtil;
+//	@Autowired
+//	private RedisUtil <PostEntity> postRedisUtil;
 
 	@Autowired
 	PostRepository postRepository;
@@ -47,13 +53,15 @@ public class PostServiceImpls implements PostService {
 	@Autowired
 	UserRepository userRepository;
 
-
+	@Autowired
+	StorageService storageService;
+	
 	//@CachePut(value = "postCache", key = "#post.id")
 	@Override
 	public List <PostEntity> getAllPosts() {
 		List <PostEntity> posts = postRepository.findAll();
-		posts.forEach(post ->  postRedisUtil.putMap(TABLE_POST, POST_ + post.getId(), post));
-		postRedisUtil.setExpire(TABLE_POST, 2, TimeUnit.MINUTES);
+//		posts.forEach(post ->  postRedisUtil.putMap(TABLE_POST, POST_ + post.getId(), post));
+//		postRedisUtil.setExpire(TABLE_POST, 2, TimeUnit.MINUTES);
 		return posts;
 
 	}
@@ -64,24 +72,27 @@ public class PostServiceImpls implements PostService {
 
 		return postRepository.findByCategory(category);
 	}
+	
 
 
 	//	@CachePut(value = "postCache", key ="{ #root.methodName, #post.title }")
 	@Override
-	public PostEntity uploadPost(PostEntity post, Long userId) {
+	public PostEntity uploadPost(PostDto post, Long userId, MultipartFile file) {
 		UserEntity user = userRepository.findById(userId).get();
 		PostEntity postEntity = new PostEntity();
-		BeanUtils.copyProperties(post, postEntity);
+		postMapper.convertToEntity(post, postEntity);
 		
 		postEntity.setUser(user);
+		postEntity.getMedia().forEach(media -> storageService.saveMedia(media.getTitle(),media.getDescription(),file));
 		postRepository.save(postEntity);
-		try {
-
-			postRedisUtil.putMap(TABLE_POST, POST_ + postEntity.getId(), postEntity);
-			postRedisUtil.setExpire(TABLE_POST, 2, TimeUnit.MINUTES);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+//		try {
+//
+//			postRedisUtil.putMap(TABLE_POST, POST_ + postEntity.getId(), postEntity);
+//			postRedisUtil.setExpire(TABLE_POST, 2, TimeUnit.MINUTES);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		
 		LOG.warn(postEntity.toString());
 		return postEntity; 
@@ -89,19 +100,20 @@ public class PostServiceImpls implements PostService {
 
 	//	@CachePut(value = "postCache", key = "#p0")
 	@Override
-	public PostEntity updatePost(Long postId, PostEntity post) throws ResourceNotFoundException {
+	public PostEntity updatePost(PostDto post, Long postId) throws ResourceNotFoundException {
 		PostEntity postEntity = postRepository.findById(postId)
 				.orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + postId));
-
-		BeanUtils.copyProperties(postEntity, post);
+		
+		postMapper.convertToEntity(post, postEntity);
+//		.copyProperties(postEntity, post);
 
 		postRepository.save(postEntity);
-		try {
-			postRedisUtil.putMap(POST_, POST_ + postId, postEntity);
-			postRedisUtil.setExpire(TABLE_POST, 2, TimeUnit.MINUTES);
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+//		try {
+//			postRedisUtil.putMap(POST_, POST_ + postId, postEntity);
+//			postRedisUtil.setExpire(TABLE_POST, 2, TimeUnit.MINUTES);
+//		} catch (Exception e){
+//			e.printStackTrace();
+//		}
 		LOG.warn(postEntity.toString());
 		return postEntity;
 	}

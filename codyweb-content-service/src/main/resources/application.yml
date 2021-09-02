@@ -1,8 +1,8 @@
 spring:
   application:
-    name: codyweb-user-service
+    name: codyweb-content-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/codyweb-user
+    url: jdbc:postgresql://localhost:5432/post
     username: postgres
     password: cody3399
     driver-class-name: org.postgresql.Driver
@@ -12,7 +12,16 @@ spring:
       ddl-auto: create-drop
     properties:      hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-
+  http:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 20MB
+  
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8089/auth/realms/codyweb
 server:
   port: 8083
 
@@ -32,6 +41,7 @@ app:
       realm: codyweb
       clientId: codyweb-client
       client-secret: d9c36075-3519-4a42-a198-f53dbc566ede
+
   
 logging:
   level:

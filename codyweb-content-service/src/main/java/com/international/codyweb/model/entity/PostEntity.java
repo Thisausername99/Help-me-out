@@ -1,7 +1,7 @@
 package com.international.codyweb.model.entity;
 
 
-import java.util.Objects;
+import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -18,7 +18,7 @@ public class PostEntity extends AuditModel{
 	
 	private static final long serialVersionUID = 1L;
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) 
+	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE) 
 	private Long id;
 
 	@NotNull
@@ -37,7 +37,12 @@ public class PostEntity extends AuditModel{
 
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "mem_id", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private UserEntity user;
+	
+	@JsonBackReference
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "post_id")
+	private List<PostMedia> media;
 
 }
