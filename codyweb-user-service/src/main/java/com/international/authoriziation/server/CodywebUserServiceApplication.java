@@ -6,9 +6,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 //import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 //import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
-//@EnableZuulProxy
 @SpringBootApplication
-//@EnableEurekaServer
 @EnableEurekaClient
 public class CodywebUserServiceApplication {
 

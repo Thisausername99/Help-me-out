@@ -27,7 +27,7 @@ import com.international.authoriziation.server.role.Role;
 public class UserEntity implements Serializable {
 	private static final long serialVersionUID = 1;
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) 
+	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE) 
 	private Long id;
 
 
