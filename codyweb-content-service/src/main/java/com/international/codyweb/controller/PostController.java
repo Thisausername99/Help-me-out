@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.GetMapping;
 /*For request parsing */
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,13 +73,17 @@ public class PostController {
 	}
 
 
-	/*Upload a post associate with a user */
+	/*Upload a post associate with a user 
+	 * User retrieve from local cache
+	 * 
+	 * */
 	@PostMapping (path ="/create")
-	public ResponseEntity<PostEntity> createPost(@Valid @RequestBody PostDto post, @RequestParam("file") MultipartFile file, HttpServletRequest request){
+	public ResponseEntity<PostEntity> createPost(@RequestPart("post") PostDto post, @RequestPart("file") MultipartFile file, HttpServletRequest request){
 		//retrieve userId to add post create by user
 //		Long userId = (Long) request.getSession().getAttribute("userId");
-		System.out.printf("file content is %d", file.getContentType());
-		LOG.info(file.getContentType());
+		
+		System.out.printf("file content is %s", file.getContentType());
+		LOG.info(post.getTitle());
 //		templet.c
 		PostEntity _post = postService.uploadPost(post, 1L, file);
 		

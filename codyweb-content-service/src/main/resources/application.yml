@@ -23,7 +23,7 @@ spring:
         jwt:
           issuer-uri: http://localhost:8089/auth/realms/codyweb
 server:
-  port: 8083
+  port: 8084
 
 eureka:
   client:

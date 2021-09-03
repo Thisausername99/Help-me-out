@@ -12,13 +12,14 @@ import com.international.codyweb.model.entity.PostMedia;
 @NoArgsConstructor
 public class PostDto {
 	
+	
+	@NotBlank
+	private String title;
+	
 	@NotBlank
 	private String category;
 	
 	@NotBlank
 	private String content;
-	
-	@NotBlank
-	private String title;
 	
 }	

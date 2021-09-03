@@ -6,16 +6,16 @@ import org.springframework.stereotype.Component;
 import com.international.codyweb.model.dto.PostDto;
 import com.international.codyweb.model.entity.PostEntity;
 
-@Component
+//@Component
 public class PostMapper extends BaseMapper<PostEntity,PostDto>{
 
 	@Override
 	public PostEntity convertToEntity(PostDto dto, Object... args) {
-		PostEntity post = new PostEntity();
+		PostEntity postEntity = new PostEntity();
 		if (dto != null) {
-			BeanUtils.copyProperties(dto, post);
+			BeanUtils.copyProperties(dto, postEntity);
 		}
-		return post;
+		return postEntity;
 	}
 
 	@Override

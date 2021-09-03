@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.international.codyweb.exception.ResourceNotFoundException;
 import com.international.codyweb.model.dto.PostDto;
 import com.international.codyweb.model.entity.PostEntity;
+import com.international.codyweb.model.entity.PostMedia;
 import com.international.codyweb.model.entity.UserEntity;
 import com.international.codyweb.model.mapper.PostMapper;
 import com.international.codyweb.model.repository.PostRepository;
@@ -42,7 +43,7 @@ public class PostServiceImpls implements PostService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PostServiceImpls.class);
 	
-	private final PostMapper postMapper;
+	private final PostMapper postMapper = new PostMapper();
 
 //	@Autowired
 //	private RedisUtil <PostEntity> postRedisUtil;
@@ -74,16 +75,21 @@ public class PostServiceImpls implements PostService {
 	}
 	
 
-
+	
 	//	@CachePut(value = "postCache", key ="{ #root.methodName, #post.title }")
 	@Override
 	public PostEntity uploadPost(PostDto post, Long userId, MultipartFile file) {
-		UserEntity user = userRepository.findById(userId).get();
-		PostEntity postEntity = new PostEntity();
-		postMapper.convertToEntity(post, postEntity);
+		UserEntity user = userRepository.findById(1L).get();
+		PostEntity postEntity = postMapper.convertToEntity(post, new PostEntity());
+
+		LOG.info(postEntity.getCategory());
+		LOG.info(postEntity.getTitle());
+		LOG.info(postEntity.getContent());
 		
 		postEntity.setUser(user);
-		postEntity.getMedia().forEach(media -> storageService.saveMedia(media.getTitle(),media.getDescription(),file));
+		List <PostMedia> media = new ArrayList<>(); 
+		media.add(storageService.saveMedia(file.getName(),file.getContentType(),file));
+		postEntity.setMedia(media);
 		postRepository.save(postEntity);
 		
 //		try {

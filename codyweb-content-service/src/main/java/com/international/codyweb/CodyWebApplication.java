@@ -20,8 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
-@EnableCaching
-//@EnableJpaAuditing
+//@EnableCaching
+@EnableJpaAuditing
 @EnableEurekaClient
 public class CodyWebApplication {
 

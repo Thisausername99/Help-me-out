@@ -12,7 +12,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "posts")
-@Getter @Setter @NoArgsConstructor
+@Getter 
+@Setter 
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostEntity extends AuditModel{
 
 	
@@ -37,7 +40,7 @@ public class PostEntity extends AuditModel{
 
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "user_id") //, nullable = false)
 	private UserEntity user;
 	
 	@JsonBackReference

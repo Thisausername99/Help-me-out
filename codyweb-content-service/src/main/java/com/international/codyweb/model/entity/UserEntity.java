@@ -16,7 +16,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "users")
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserEntity implements Serializable {
 	private static final long serialVersionUID = 1;
 
