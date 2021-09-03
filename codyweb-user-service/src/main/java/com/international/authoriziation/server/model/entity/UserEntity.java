@@ -20,10 +20,10 @@ import com.international.authoriziation.server.model.dto.Status;
 //import com.international.codyweb.post.Post;
 import com.international.authoriziation.server.role.Role;
 
-
+@Data
 @Entity
 @Table(name = "users")
-@Getter @Setter @NoArgsConstructor
+@NoArgsConstructor
 public class UserEntity implements Serializable {
 	private static final long serialVersionUID = 1;
 
