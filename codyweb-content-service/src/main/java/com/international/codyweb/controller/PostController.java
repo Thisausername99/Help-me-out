@@ -51,9 +51,9 @@ public class PostController {
 //	
 	
 	@GetMapping (path = "/find/all")
-	public ResponseEntity<List<PostEntity>> getAll(){
+	public ResponseEntity<List<PostEntity>> getPostByUserId(@RequestParam("id")Long userId){
 		List<PostEntity> posts = new ArrayList<>();
-		postService.getAllPosts().forEach(posts::add);
+		postService.getPostByUserId(userId).forEach(posts::add);
 		if (posts.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
@@ -83,6 +83,7 @@ public class PostController {
 //		Long userId = (Long) request.getSession().getAttribute("userId");
 		
 		System.out.printf("file content is %s", file.getContentType());
+//		request.getAttribute(null) -> get userId from session
 		LOG.info(post.getTitle());
 //		templet.c
 		PostEntity _post = postService.uploadPost(post, 1L, file);

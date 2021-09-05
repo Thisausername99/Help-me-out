@@ -15,4 +15,7 @@ public interface PostRepository extends JpaRepository<PostEntity,Long> {
 	
 	@Query(value = "SELECT u FROM Posts u WHERE u.category = ?1", nativeQuery = true)
 	List <PostEntity> findByCategory(String category);
+	
+//	@Query("SELECT u FROM Posts u WHERE u.user_id = %:userId%")
+	List <PostEntity> findByuserId(Long userId);
 }

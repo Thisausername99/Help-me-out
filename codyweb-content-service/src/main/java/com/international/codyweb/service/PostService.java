@@ -16,7 +16,7 @@ import com.international.codyweb.model.entity.PostEntity;
  */
 public interface PostService {
 	
-	List <PostEntity> getAllPosts();
+	List <PostEntity> getPostByUserId(final Long userId);
 	List <PostEntity> getPostByCategory(final String category);
 	PostEntity uploadPost (final PostDto post, final Long userId, final MultipartFile file);
 	PostEntity updatePost (final PostDto post, final Long postId) throws ResourceNotFoundException;

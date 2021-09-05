@@ -25,24 +25,24 @@ public class PostEntity extends AuditModel{
 	private Long id;
 
 	@NotNull
+	private Long userId;
+	
+	@NotNull
 	@Size(max = 100)
-	@Column(unique = true)
+//	@Column(unique = true)
 	private String title;
 
 	@NotNull
 	@Size(max = 250)
 	private String category;
 
-
+	
+	private boolean containMedia;
+	
 	@NotNull
 	@Lob
 	private String content;
 
-	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_id") //, nullable = false)
-	private UserEntity user;
-	
 	@JsonBackReference
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id")

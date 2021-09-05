@@ -19,10 +19,8 @@ import com.international.codyweb.exception.ResourceNotFoundException;
 import com.international.codyweb.model.dto.PostDto;
 import com.international.codyweb.model.entity.PostEntity;
 import com.international.codyweb.model.entity.PostMedia;
-import com.international.codyweb.model.entity.UserEntity;
 import com.international.codyweb.model.mapper.PostMapper;
 import com.international.codyweb.model.repository.PostRepository;
-import com.international.codyweb.model.repository.UserRepository;
 import com.international.codyweb.util.RedisUtil;
 
 import lombok.AllArgsConstructor;
@@ -51,16 +49,16 @@ public class PostServiceImpls implements PostService {
 	@Autowired
 	PostRepository postRepository;
 
-	@Autowired
-	UserRepository userRepository;
+//	@Autowired
+//	UserRepository userRepository;
 
 	@Autowired
 	StorageService storageService;
 	
 	//@CachePut(value = "postCache", key = "#post.id")
 	@Override
-	public List <PostEntity> getAllPosts() {
-		List <PostEntity> posts = postRepository.findAll();
+	public List <PostEntity> getPostByUserId(Long userId) {
+		List <PostEntity> posts = postRepository.findByuserId(userId);
 //		posts.forEach(post ->  postRedisUtil.putMap(TABLE_POST, POST_ + post.getId(), post));
 //		postRedisUtil.setExpire(TABLE_POST, 2, TimeUnit.MINUTES);
 		return posts;
@@ -79,17 +77,21 @@ public class PostServiceImpls implements PostService {
 	//	@CachePut(value = "postCache", key ="{ #root.methodName, #post.title }")
 	@Override
 	public PostEntity uploadPost(PostDto post, Long userId, MultipartFile file) {
-		UserEntity user = userRepository.findById(1L).get();
+//		UserEntity user = userRepository.findById(1L).get();
 		PostEntity postEntity = postMapper.convertToEntity(post, new PostEntity());
-
+		postEntity.setUserId(userId);
 		LOG.info(postEntity.getCategory());
 		LOG.info(postEntity.getTitle());
 		LOG.info(postEntity.getContent());
+		LOG.info(postEntity.getUserId().toString());
 		
-		postEntity.setUser(user);
+//		postEntity.setUser(user);
 		List <PostMedia> media = new ArrayList<>(); 
-		media.add(storageService.saveMedia(file.getName(),file.getContentType(),file));
-		postEntity.setMedia(media);
+		if (!file.isEmpty()) {
+			media.add(storageService.saveMedia(file.getName(),file.getContentType(),file));
+			postEntity.setMedia(media);
+			postEntity.setContainMedia(true);
+		}
 		postRepository.save(postEntity);
 		
 //		try {
