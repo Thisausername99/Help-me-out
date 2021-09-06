@@ -1,3 +1,4 @@
+package com.international.authoriziation.server.config;
 ///**
 // * 
 // */

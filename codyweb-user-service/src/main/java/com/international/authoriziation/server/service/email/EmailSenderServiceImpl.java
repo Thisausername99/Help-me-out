@@ -1,4 +1,4 @@
-package com.international.authoriziation.server.service;
+package com.international.authoriziation.server.service.email;
 
 
 import javax.mail.MessagingException;

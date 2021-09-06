@@ -1,4 +1,4 @@
-package com.international.codyweb.model;
+package com.international.authoriziation.server.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

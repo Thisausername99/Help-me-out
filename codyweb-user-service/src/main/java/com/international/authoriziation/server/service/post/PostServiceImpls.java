@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.international.codyweb.service;
+package com.international.authoriziation.server.service.post;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -15,13 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.international.codyweb.exception.ResourceNotFoundException;
-import com.international.codyweb.model.dto.PostDto;
-import com.international.codyweb.model.entity.PostEntity;
-import com.international.codyweb.model.entity.PostMedia;
-import com.international.codyweb.model.mapper.PostMapper;
-import com.international.codyweb.model.repository.PostRepository;
-import com.international.codyweb.util.RedisUtil;
+import com.international.authoriziation.server.model.dto.PostDto;
+import com.international.authoriziation.server.model.entity.PostEntity;
+import com.international.authoriziation.server.model.entity.PostMedia;
+import com.international.authoriziation.server.model.mapper.PostMapper;
+import com.international.authoriziation.server.model.repository.PostRepository;
+import com.international.authoriziation.server.service.storage.StorageService;
+import com.international.authoriziation.server.exception.ResourceNotFoundException;
+import com.international.authoriziation.server.util.cache.RedisUtil;
 
 import lombok.AllArgsConstructor;
 

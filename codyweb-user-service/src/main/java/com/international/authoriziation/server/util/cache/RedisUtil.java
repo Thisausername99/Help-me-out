@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.international.codyweb.util;
+package com.international.authoriziation.server.util.cache;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;

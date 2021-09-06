@@ -1,4 +1,4 @@
-package com.international.authoriziation.server.service;
+package com.international.authoriziation.server.service.user;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -38,8 +38,9 @@ import com.international.authoriziation.server.model.repository.UserRepository;
 import com.international.authoriziation.server.role.ERole;
 import com.international.authoriziation.server.role.Role;
 import com.international.authoriziation.server.role.RoleRepository;
+import com.international.authoriziation.server.service.email.EmailService;
+import com.international.authoriziation.server.service.token.VerificationTokenService;
 import com.international.authoriziation.server.token.pojo.VerificationToken;
-import com.international.authoriziation.server.token.service.VerificationTokenService;
 import com.international.authoriziation.server.util.email.AccountVerificationEmailContext;
 import com.international.authoriziation.server.model.entity.UserEntity;
 

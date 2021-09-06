@@ -1,4 +1,4 @@
-package com.international.codyweb.model;
+package com.international.authoriziation.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.CreatedDate;

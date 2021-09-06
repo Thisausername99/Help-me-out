@@ -1,10 +1,10 @@
-package com.international.codyweb.model.mapper;
+package com.international.authoriziation.server.model.mapper;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import com.international.codyweb.model.dto.PostDto;
-import com.international.codyweb.model.entity.PostEntity;
+import com.international.authoriziation.server.model.dto.PostDto;
+import com.international.authoriziation.server.model.entity.PostEntity;
 
 //@Component
 public class PostMapper extends BaseMapper<PostEntity,PostDto>{

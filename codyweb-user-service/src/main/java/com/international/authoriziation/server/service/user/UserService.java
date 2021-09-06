@@ -1,4 +1,4 @@
-package com.international.authoriziation.server.service;
+package com.international.authoriziation.server.service.user;
 
 import com.international.authoriziation.server.exception.InvalidTokenException;
 import com.international.authoriziation.server.exception.ResourceNotFoundException;

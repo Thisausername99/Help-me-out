@@ -1,4 +1,4 @@
-package com.international.codyweb.service;
+package com.international.authoriziation.server.service.storage;
 
 import java.io.IOException;
 import java.io.InputStream;

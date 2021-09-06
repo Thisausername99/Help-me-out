@@ -24,8 +24,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.RequestPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,11 +36,9 @@ import com.international.authoriziation.server.exception.UserNotVerifiedExceptio
 //import com.international.authoriziation.server.jwt.JwtUtils;
 import com.international.authoriziation.server.model.dto.LoginRequest;
 import com.international.authoriziation.server.model.dto.MessageResponse;
+import com.international.authoriziation.server.model.dto.PostDto;
 import com.international.authoriziation.server.model.dto.SignupRequest;
-//import com.international.authoriziation.server.model.dto.User;
-//import com.international.authoriziation.server.service.KeycloakUserService;
-import com.international.authoriziation.server.service.UserService;
-//import com.international.authoriziation.server.token.pojo.VerificationToken;
+import com.international.authoriziation.server.service.user.UserService;
 
 
 
@@ -47,16 +46,15 @@ import com.international.authoriziation.server.service.UserService;
 //@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/user/")
-public class AuthController {
+public class UserController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private UserService userService;
 	
-//	@Autowired
-//	private KeycloakUserService keycloakUserService;
-    
+	
+
 	
 //	@PostMapping(value = "/register")
 //    public ResponseEntity<?> createUser(@RequestBody User request) {
@@ -80,16 +78,6 @@ public class AuthController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
-	
-//
-//	@Autowired
-//	private RefreshTokenServiceImpls refreshTokenService;
-//
-//
-//	@Autowired
-//	private JwtUtils jwtUtils;
-//
-//
 	@PostMapping("/sign-in")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) throws UserNotVerifiedException {
 
@@ -122,7 +110,7 @@ public class AuthController {
 //		//Store user id for later use in parameter
 //		
 //		
-//		request.getSession().setAttribute("userId", userDetails.getId());
+		request.getSession().setAttribute("userId", userDetails.getId());
 //		request.getSession().setAttribute("userName", userDetails.getUsername());
 //		
 //
@@ -163,6 +151,15 @@ public class AuthController {
 		//      return REDIRECT_LOGIN;
 		return ResponseEntity.ok(new MessageResponse("User successfully verified!"));
 	}
+
+	
+//	@PostMapping
+//	public ResponseEntity<?> uploadPost(@RequestPart("post") PostDto post, @RequestPart("file") MultipartFile file, HttpServletRequest request){
+//		Long userId = (Long) request.getAttribute("userId");	
+//		return postClient.uploadPost(post, file, userId);
+//	}
+//	
+	
 //
 //
 //

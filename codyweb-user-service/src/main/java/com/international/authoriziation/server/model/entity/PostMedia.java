@@ -1,4 +1,4 @@
-package com.international.codyweb.model.entity;
+package com.international.authoriziation.server.model.entity;
 
 
 

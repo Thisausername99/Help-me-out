@@ -1,4 +1,4 @@
-package com.international.codyweb.service;
+package com.international.authoriziation.server.service.storage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.international.codyweb.model.entity.PostMedia;
-import com.international.codyweb.model.repository.MediaRepository;
-import com.international.codyweb.controller.PostController;
-import com.international.codyweb.model.BucketName;
+import com.international.authoriziation.server.model.BucketName;
+import com.international.authoriziation.server.model.entity.PostMedia;
+import com.international.authoriziation.server.model.repository.MediaRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -22,7 +21,7 @@ import java.util.*;
 @AllArgsConstructor
 public class StorageServiceImpls implements StorageService{
 	
-	private static final Logger LOG = LoggerFactory.getLogger(PostController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StorageServiceImpls.class);
 
 	@Autowired
 	private final MediaRepository mediaRepository;

@@ -1,14 +1,14 @@
 /**
  * 
  */
-package com.international.codyweb.service;
+package com.international.authoriziation.server.service.post;
 
 import java.util.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.international.codyweb.exception.ResourceNotFoundException;
-import com.international.codyweb.model.dto.PostDto;
-import com.international.codyweb.model.entity.PostEntity;
+import com.international.authoriziation.server.model.dto.PostDto;
+import com.international.authoriziation.server.model.entity.PostEntity;
+import com.international.authoriziation.server.exception.ResourceNotFoundException;
 
 /**
  * @author Cody Hoang

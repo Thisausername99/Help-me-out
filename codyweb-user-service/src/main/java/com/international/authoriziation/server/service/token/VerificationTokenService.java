@@ -1,4 +1,4 @@
-package com.international.authoriziation.server.token.service;
+package com.international.authoriziation.server.service.token;
 
 import com.international.authoriziation.server.token.pojo.VerificationToken;
 

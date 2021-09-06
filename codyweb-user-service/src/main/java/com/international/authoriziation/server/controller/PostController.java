@@ -1,4 +1,4 @@
-package com.international.codyweb.controller;
+package com.international.authoriziation.server.controller;
 
 
 import java.util.*;
@@ -25,11 +25,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.international.codyweb.model.dto.PostDto;
-import com.international.codyweb.model.entity.PostEntity;
-import com.international.codyweb.service.PostService;
-import com.international.codyweb.service.PostServiceImpls;
-import com.international.codyweb.service.StorageService;
+import com.international.authoriziation.server.model.dto.PostDto;
+import com.international.authoriziation.server.model.entity.PostEntity;
+import com.international.authoriziation.server.service.post.PostService;
+import com.international.authoriziation.server.service.storage.StorageService;
 
 import lombok.extern.java.Log;
 

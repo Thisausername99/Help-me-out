@@ -22,18 +22,18 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   
+  http:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 20MB
+    
+  cloud:
+    loadbalancer:      ribbon:
+        enabled: false
+  
   security:    oauth2:      resourceserver:        jwt:          issuer-uri: http://localhost:8089/auth/realms/codyweb
-#  cloud:
-#    vault:
-#      host: localhost
-#      port: 8200
-#      scheme: http
-#      authentication: TOKEN
-#      token: s.1eJL6HWOX3kUe4c38z9ZjDQB
-#      application-name: user-service
-#      
-  
-  
+
+    
 server:
   port: 8083
 
