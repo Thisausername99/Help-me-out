@@ -12,10 +12,11 @@ import lombok.*;
 
 
 
-
+@Data
 @Entity
 @Table(name = "roles")
-@Getter @Setter @NoArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role {
 //	private static final long serialVersionUID = 1L;
 	
@@ -30,7 +31,6 @@ public class Role {
 	@ManyToMany(mappedBy = "roles")
 	@JsonBackReference
     private Set <UserEntity> users;
-	
 	
 	public Role(ERole name) {
 		this.name = name;

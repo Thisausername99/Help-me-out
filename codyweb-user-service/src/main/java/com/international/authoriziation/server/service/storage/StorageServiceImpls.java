@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.international.authoriziation.server.model.BucketName;
-import com.international.authoriziation.server.model.entity.PostMedia;
+import com.international.authoriziation.server.model.entity.MediaEntity;
 import com.international.authoriziation.server.model.repository.MediaRepository;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +30,7 @@ public class StorageServiceImpls implements StorageService{
 	private final FileStore fileStore;
 	
 	@Override
-	public PostMedia saveMedia(String title, String description, MultipartFile file) {
+	public MediaEntity saveMedia(String title, String description, MultipartFile file) {
 		if (file.isEmpty()) {
             throw new IllegalStateException("Cannot upload empty file");
         }
@@ -53,7 +53,7 @@ public class StorageServiceImpls implements StorageService{
         } catch (IOException e) {
             throw new IllegalStateException("Failed to upload file", e);
         }
-        PostMedia media =  PostMedia.builder()
+        MediaEntity media =  MediaEntity.builder()
                 .description(description)
                 .title(title)
                 .imagePath(path)
@@ -66,7 +66,7 @@ public class StorageServiceImpls implements StorageService{
 
 	@Override
 	public byte[] downloadMedia(Long id) {
-		PostMedia media = mediaRepository.findById(id).get();
+		MediaEntity media = mediaRepository.findById(id).get();
         return fileStore.download(media.getImagePath(), media.getImageFileName());
 	}
 

@@ -24,6 +24,8 @@ import com.international.authoriziation.server.role.Role;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserEntity implements Serializable {
 	private static final long serialVersionUID = 1;
 
@@ -44,23 +46,23 @@ public class UserEntity implements Serializable {
 	@NotEmpty
 	private String password;
 
-//    @Enumerated(EnumType.STRING)
-//    private Status status;
+	//    @Enumerated(EnumType.STRING)
+	//    private Status status;
 
 	private boolean accountVerified;
-//
-//	private int failedLoginAttempts;
-//
+	//
+	//	private int failedLoginAttempts;
+	//
 	private boolean loginDisabled;
 
 
 
-//	//User is parent of posts
-//	@JsonManagedReference
-//	//	@JsonIgnore
-//	@OneToMany(mappedBy = "user",fetch = FetchType.LAZY,
-//	cascade = CascadeType.ALL)
-//	private Set<Post> posts = new HashSet<>();
+	//	//User is parent of posts
+	//	@JsonManagedReference
+	//	//	@JsonIgnore
+	//	@OneToMany(mappedBy = "user",fetch = FetchType.LAZY,
+	//	cascade = CascadeType.ALL)
+	//	private Set<Post> posts = new HashSet<>();
 
 	//Member can have many role and role can be assigned to many member
 
@@ -69,16 +71,9 @@ public class UserEntity implements Serializable {
 	joinColumns = @JoinColumn(name = "user_id"), 
 	inverseJoinColumns = @JoinColumn(name = "role_id"))
 	@JsonManagedReference
-	private Set<Role> roles = new HashSet<>();
+	private final Set<Role> roles = new HashSet<>();
 
-
-//	public UserEntity(String username, String email, String password) {
-//		this.username = username;
-//		this.email = email;
-//		this.password = password;
-//
-//	}
-
+	
 	public void addUserRoles(Role role){
 		roles.add(role);
 		role.getUsers().add(this);
@@ -90,22 +85,5 @@ public class UserEntity implements Serializable {
 	}
 
 
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, email);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserEntity other = (UserEntity) obj;
-		return Objects.equals(email, other.email) && Objects.equals(password, other.password);
-	}
 
 }

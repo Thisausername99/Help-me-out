@@ -11,22 +11,20 @@ import com.international.authoriziation.server.model.AuditModel;
 
 import lombok.*;
 
+
 @Entity
 @Table(name = "posts")
-@Getter 
-@Setter 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostEntity extends AuditModel{
 
-	
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE) 
 	private Long id;
 
-	@NotNull
-	private Long userId;
 	
 	@NotNull
 	@Size(max = 100)
@@ -53,6 +51,6 @@ public class PostEntity extends AuditModel{
 	@JsonBackReference
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id")
-	private List<PostMedia> media;
+	private List<MediaEntity> media;
 
 }

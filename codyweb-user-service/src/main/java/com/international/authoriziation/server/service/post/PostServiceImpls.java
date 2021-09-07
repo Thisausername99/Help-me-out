@@ -4,22 +4,22 @@
 package com.international.authoriziation.server.service.post;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.international.authoriziation.server.model.dto.PostDto;
+import com.international.authoriziation.server.model.entity.MediaEntity;
 import com.international.authoriziation.server.model.entity.PostEntity;
-import com.international.authoriziation.server.model.entity.PostMedia;
+import com.international.authoriziation.server.model.entity.UserEntity;
 import com.international.authoriziation.server.model.mapper.PostMapper;
 import com.international.authoriziation.server.model.repository.PostRepository;
+import com.international.authoriziation.server.model.repository.UserRepository;
 import com.international.authoriziation.server.service.storage.StorageService;
 import com.international.authoriziation.server.exception.ResourceNotFoundException;
 import com.international.authoriziation.server.util.cache.RedisUtil;
@@ -50,8 +50,8 @@ public class PostServiceImpls implements PostService {
 	@Autowired
 	PostRepository postRepository;
 
-//	@Autowired
-//	UserRepository userRepository;
+	@Autowired
+	UserRepository userRepository;
 
 	@Autowired
 	StorageService storageService;
@@ -77,23 +77,23 @@ public class PostServiceImpls implements PostService {
 	
 	//	@CachePut(value = "postCache", key ="{ #root.methodName, #post.title }")
 	@Override
-	public PostEntity uploadPost(PostDto post, Long userId, MultipartFile file) {
-//		UserEntity user = userRepository.findById(1L).get();
-		PostEntity postEntity = postMapper.convertToEntity(post, new PostEntity());
-		postEntity.setUserId(userId);
-		LOG.info(postEntity.getCategory());
-		LOG.info(postEntity.getTitle());
-		LOG.info(postEntity.getContent());
-		LOG.info(postEntity.getUserId().toString());
+	public PostEntity uploadPost(PostDto postDto, Long userId, MultipartFile file) {
+		UserEntity user = userRepository.findById(userId).get();
+		PostEntity post = postMapper.convertToEntity(postDto, new PostEntity());
+		post.setUser(user);
+		LOG.info(post.getCategory());
+		LOG.info(post.getTitle());
+		LOG.info(post.getContent());
+//		LOG.info(postEntity.getUserId().toString());
 		
 //		postEntity.setUser(user);
-		List <PostMedia> media = new ArrayList<>(); 
+		List <MediaEntity> media = new ArrayList<>(); 
 		if (!file.isEmpty()) {
 			media.add(storageService.saveMedia(file.getName(),file.getContentType(),file));
-			postEntity.setMedia(media);
-			postEntity.setContainMedia(true);
+			post.setMedia(media);
+			post.setContainMedia(true);
 		}
-		postRepository.save(postEntity);
+		
 		
 //		try {
 //
@@ -103,8 +103,8 @@ public class PostServiceImpls implements PostService {
 //			e.printStackTrace();
 //		}
 		
-		LOG.warn(postEntity.toString());
-		return postEntity; 
+//		LOG.warn(post.toString());
+		return postRepository.save(post); 
 	}
 
 	//	@CachePut(value = "postCache", key = "#p0")

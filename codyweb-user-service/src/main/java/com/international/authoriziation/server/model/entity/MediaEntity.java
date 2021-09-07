@@ -17,7 +17,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "media")
-public class PostMedia {
+public class MediaEntity {
 	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE) 
     private Long id;
     private String title;

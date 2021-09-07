@@ -34,12 +34,17 @@ public class StartUpConfig {
 			Role user = new Role (ERole.ROLE_USER);
 			Role mod = new Role (ERole.ROLE_MODERATOR);
 			Role admin = new Role (ERole.ROLE_ADMIN);
-//			UserEntity adam= new UserEntity();
+			UserEntity adam= UserEntity.builder()
+					.email("test@gmail.com")
+					.username("test")
+					.password("1234")
+					.build();
 			
 			
 			//pre insert role into db
 			roleRepository.saveAll(
 					List.of(user,mod,admin));
+			userRepository.save(adam);
 			
 		};
 		
