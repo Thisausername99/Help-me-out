@@ -1,4 +1,4 @@
-package com.international.authoriziation.server.service.email;
+package com.international.codyweb.service;
 
 
 import javax.mail.MessagingException;
@@ -6,6 +6,7 @@ import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -13,12 +14,18 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import com.international.authoriziation.server.util.email.AbstractEmailContext;
+import com.international.codyweb.model.dto.EmailDto;
+import com.international.codyweb.util.AbstractEmailContext;
+import com.international.codyweb.util.AccountVerificationEmailContext;
+
 
 
 @Service
-public class EmailSenderServiceImpl implements EmailService{
-
+public class EmailServiceImpl implements EmailService{
+	
+	@Value("${cody.app.base.url}")
+	private String baseURL;
+	
 	@Autowired
 	private JavaMailSender emailSender;
 
@@ -26,11 +33,11 @@ public class EmailSenderServiceImpl implements EmailService{
 	private SpringTemplateEngine templateEngine;
 
 	@Autowired
-	public EmailSenderServiceImpl(JavaMailSender emailSender) {
+	public EmailServiceImpl(JavaMailSender emailSender) {
 		this.emailSender = emailSender;
 	}
-
-
+	
+	
 	@Override
 	@Async
 	public void sendMail(AbstractEmailContext email) throws MessagingException {
@@ -47,5 +54,15 @@ public class EmailSenderServiceImpl implements EmailService{
 		mimeMessageHelper.setFrom(email.getFrom());
 		mimeMessageHelper.setText(emailContent, true);
 		emailSender.send(message);
+	}
+
+
+	@Override
+	public void setupMail(EmailDto emailDto) {
+		AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
+		emailContext.init(emailDto);
+		emailContext.setToken(emailDto.getToken());
+		emailContext.buildVerificationUrl(baseURL, emailDto.getToken());
+		System.out.println(emailDto.getToken());
 	}
 }

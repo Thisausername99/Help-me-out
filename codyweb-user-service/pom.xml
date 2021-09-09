@@ -49,17 +49,13 @@
 		</dependency>
 
 
-		<!-- For jwt token -->
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-			<version>0.9.1</version>
-		</dependency>
+		<!-- For jwt token> <dependency> <groupId>io.jsonwebtoken</groupId> <artifactId>jjwt</artifactId> 
+			<version>0.9.1</version> </dependency> <dependency> <groupId>org.glassfish</groupId> 
+			<artifactId>javax.el</artifactId> <version>3.0.0</version> </dependency -->
 
 		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.el</artifactId>
-			<version>3.0.0</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
 
 		<!-- Email -->
@@ -147,16 +143,14 @@
 			<artifactId>aws-java-sdk</artifactId>
 			<version>1.11.931</version>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
-		<!--dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-		</dependency-->
+		<!--dependency> <groupId>org.springframework.cloud</groupId> <artifactId>spring-cloud-starter-openfeign</artifactId> 
+			</dependency -->
 
 
 		<!-- testing -->

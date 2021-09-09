@@ -125,10 +125,10 @@ public class UserController {
 			userService.register(signupRequest);
 		}
 		catch (Exception e) {
-			//			e.printStackTrace();
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: " + e.getMessage()));
+			e.printStackTrace();
+//			return ResponseEntity
+//					.badRequest()
+//					.body(new MessageResponse("Error: " + e.getMessage()));
 		}
 	
 		return ResponseEntity.ok(new MessageResponse("User registered"));

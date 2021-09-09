@@ -31,6 +31,7 @@ import com.international.authoriziation.server.exception.InvalidTokenException;
 import com.international.authoriziation.server.exception.ResourceNotFoundException;
 import com.international.authoriziation.server.exception.UserAlreadyExistException;
 import com.international.authoriziation.server.exception.UserNotVerifiedException;
+import com.international.authoriziation.server.model.dto.EmailDto;
 import com.international.authoriziation.server.model.dto.SignupRequest;
 import com.international.authoriziation.server.model.mapper.UserMapper;
 //import com.international.authoriziation.server.model.entity.User;
@@ -38,10 +39,11 @@ import com.international.authoriziation.server.model.repository.UserRepository;
 import com.international.authoriziation.server.role.ERole;
 import com.international.authoriziation.server.role.Role;
 import com.international.authoriziation.server.role.RoleRepository;
-import com.international.authoriziation.server.service.email.EmailService;
 import com.international.authoriziation.server.service.token.VerificationTokenService;
 import com.international.authoriziation.server.token.pojo.VerificationToken;
-import com.international.authoriziation.server.util.email.AccountVerificationEmailContext;
+import com.international.authoriziation.server.util.broker.RabbitProducer;
+//import com.international.codyweb.util.AccountVerificationEmailContext;
+//import com.international.codyweb.service.EmailService;
 import com.international.authoriziation.server.model.entity.UserEntity;
 
 //import com.international.codyweb.util.RedisUtil;
@@ -58,12 +60,10 @@ public class UserServiceImpls implements UserService {
 	private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpls.class);
 
 	private UserMapper userMapper = new UserMapper();
-	
-	@Autowired
-	private EmailService emailService;
 
-	
-
+	//	private EmailService emailService;
+	@Autowired	
+	private RabbitProducer rabbitProducer;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -89,10 +89,10 @@ public class UserServiceImpls implements UserService {
 	//	@Autowired
 	//	private RedisUtil<User> userRedisUtil;
 
-	@Value("${cody.app.base.url}")
-	private String baseURL;
+	//	@Value("${cody.app.base.url}")
+	//	private String baseURL;
 
-    
+
 	//    @Autowired
 	//    RedisTemplate<String, Object> redisTemplate;
 	//    private HashOperations<String, Long, User> hashOperations;
@@ -143,10 +143,9 @@ public class UserServiceImpls implements UserService {
 		LOG.info("the pw is " + signupRequest.getPassword());
 		UserEntity user = userMapper.convertToEntity(signupRequest, new UserEntity());
 		encodePassword(signupRequest, user);
-		LOG.info("the user email is: " + user.getEmail());
 		updateUserRoles(user);
 		userRepository.save(user);
-		System.out.println("GOT HERE");
+		System.out.println("GOT HERE");	
 		sendRegistrationConfirmationEmail(user);
 
 	}
@@ -170,18 +169,17 @@ public class UserServiceImpls implements UserService {
 
 		//		System.out.println(user.getEmail());
 		verificationTokenService.saveVerificationToken(verificationToken);
-		AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
-		emailContext.init(user);
-		emailContext.setToken(verificationToken.getToken());
-		emailContext.buildVerificationUrl(baseURL, verificationToken.getToken());
-		System.out.println(verificationToken.getToken());
-//		try {
-//			System.out.println("Stuck here");
-//			emailService.sendMail(emailContext);
-//		} catch (MessagingException e) {
-//
-//			e.printStackTrace();
-//		}
+		EmailDto emailDto = EmailDto.builder()
+				.email(user.getEmail())
+				.token(verificationToken.toString())
+				.username(user.getUsername()).build();
+		try {
+			rabbitProducer.produce(emailDto);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
 
 	}
 

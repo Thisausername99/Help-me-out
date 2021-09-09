@@ -20,9 +20,13 @@ import com.international.authoriziation.server.model.dto.Status;
 //import com.international.codyweb.post.Post;
 import com.international.authoriziation.server.role.Role;
 
-@Data
+
+
+//use Data encouter servlet error ?
 @Entity
-@Table(name = "users")
+@Table(name = "users") 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -71,7 +75,8 @@ public class UserEntity implements Serializable {
 	joinColumns = @JoinColumn(name = "user_id"), 
 	inverseJoinColumns = @JoinColumn(name = "role_id"))
 	@JsonManagedReference
-	private final Set<Role> roles = new HashSet<>();
+	@Builder.Default
+	private Set<Role> roles = new HashSet<>();
 
 	
 	public void addUserRoles(Role role){
