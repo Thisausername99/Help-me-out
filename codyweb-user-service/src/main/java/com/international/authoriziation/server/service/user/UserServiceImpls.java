@@ -61,7 +61,7 @@ public class UserServiceImpls implements UserService {
 
 	private UserMapper userMapper = new UserMapper();
 
-	//	private EmailService emailService;
+
 	@Autowired	
 	private RabbitProducer rabbitProducer;
 
@@ -73,7 +73,6 @@ public class UserServiceImpls implements UserService {
 
 	@Autowired
 	private VerificationTokenService verificationTokenService;
-
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -89,10 +88,7 @@ public class UserServiceImpls implements UserService {
 	//	@Autowired
 	//	private RedisUtil<User> userRedisUtil;
 
-	//	@Value("${cody.app.base.url}")
-	//	private String baseURL;
-
-
+	
 	//    @Autowired
 	//    RedisTemplate<String, Object> redisTemplate;
 	//    private HashOperations<String, Long, User> hashOperations;
@@ -171,7 +167,7 @@ public class UserServiceImpls implements UserService {
 		verificationTokenService.saveVerificationToken(verificationToken);
 		EmailDto emailDto = EmailDto.builder()
 				.email(user.getEmail())
-				.token(verificationToken.toString())
+				.token(verificationToken.getToken())
 				.username(user.getUsername()).build();
 		try {
 			rabbitProducer.produce(emailDto);
@@ -197,7 +193,7 @@ public class UserServiceImpls implements UserService {
 			user.setAccountVerified(true);
 
 
-			//memberRepository.save(memberEntity);
+			
 			userRepository.save(user); // let's same user details
 
 			// we don't need invalid password now

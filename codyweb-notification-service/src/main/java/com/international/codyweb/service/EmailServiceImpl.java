@@ -55,14 +55,4 @@ public class EmailServiceImpl implements EmailService{
 		mimeMessageHelper.setText(emailContent, true);
 		emailSender.send(message);
 	}
-
-
-	@Override
-	public void setupMail(EmailDto emailDto) {
-		AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
-		emailContext.init(emailDto);
-		emailContext.setToken(emailDto.getToken());
-		emailContext.buildVerificationUrl(baseURL, emailDto.getToken());
-		System.out.println(emailDto.getToken());
-	}
 }

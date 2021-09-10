@@ -88,7 +88,7 @@ public class UserController {
 		//get the current security context object then set up the new authentication object (username, pw)
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();	
-
+		LOG.info("Registrating user...");
 		//check if user has been verified
 		try {
 			userService.checkIfUserVerified(userDetails.getUsername());
@@ -98,8 +98,7 @@ public class UserController {
 					.badRequest()
 					.body(new MessageResponse("Error: " + e.getMessage()));	
 		}
-//
-//
+
 //		String jwt = jwtUtils.generateJwtToken(authentication);
 //
 //		List<String> roles = Optional.ofNullable(userDetails.getAuthorities()).orElseGet(Collections::emptyList).stream().map(item -> item.getAuthority())
@@ -111,13 +110,11 @@ public class UserController {
 //		
 //		
 		request.getSession().setAttribute("userId", userDetails.getId());
-//		request.getSession().setAttribute("userName", userDetails.getUsername());
-//		
-//
-//
+
 		return ResponseEntity.ok(userDetails.getUsername());
 	}
-//
+
+	
 	@PostMapping("/sign-up")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
@@ -126,15 +123,12 @@ public class UserController {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-//			return ResponseEntity
-//					.badRequest()
-//					.body(new MessageResponse("Error: " + e.getMessage()));
 		}
-	
 		return ResponseEntity.ok(new MessageResponse("User registered"));
 	}
-//
-//
+
+	
+	
 	@PostMapping(value="/confirm-account")
 	public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String verificationToken){
 		try {

@@ -23,6 +23,7 @@ public class AccountVerificationEmailContext extends AbstractEmailContext{
 		setTemplateLocation("emails/email-verification");
 		setSubject("Complete your registration");
 		setFrom("no-reply@codyweb.com");
+		System.out.println(emailDto.getEmail());
 		setTo(emailDto.getEmail());
 	}
 

@@ -9,6 +9,6 @@ import com.international.codyweb.util.AbstractEmailContext;
 public interface EmailService {
 	 void sendMail(final AbstractEmailContext email) throws MessagingException;
 	 
-	 void setupMail(EmailDto emailDto);
+//	 void setupMail(EmailDto emailDto);
 	 
 }
