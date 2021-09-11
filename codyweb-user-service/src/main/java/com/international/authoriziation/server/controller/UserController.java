@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +34,6 @@ import com.international.authoriziation.server.exception.UserNotVerifiedExceptio
 //import com.international.authoriziation.server.jwt.JwtUtils;
 import com.international.authoriziation.server.model.dto.LoginRequest;
 import com.international.authoriziation.server.model.dto.MessageResponse;
-import com.international.authoriziation.server.model.dto.PostDto;
 import com.international.authoriziation.server.model.dto.SignupRequest;
 import com.international.authoriziation.server.service.user.UserService;
 

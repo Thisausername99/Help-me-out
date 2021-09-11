@@ -1,18 +1,15 @@
 package com.international.authoriziation.server.service.user;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+//import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 
 //import org.springframework.data.domain.Example;
@@ -21,7 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.data.domain.Sort;
 //import org.springframework.data.redis.core.HashOperations;
 //import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Async;
+//import org.springframework.scheduling.annotation.Async;
 //import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

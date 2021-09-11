@@ -13,12 +13,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.international.authoriziation.server.auth.UserDetailsServiceImpl;
 
@@ -29,6 +27,14 @@ import com.international.authoriziation.server.auth.UserDetailsServiceImpl;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	private static final String[] AUTH_LIST = {
+	        // -- swagger ui
+	        "/swagger-resources/**",
+	        "/swagger-ui/**",
+	        "/v2/api-docs",
+	        "/webjars/**"
+	};
 	
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
@@ -69,7 +75,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	public void configure(HttpSecurity security) throws Exception{
-		security.authorizeRequests(authorize -> authorize.anyRequest().authenticated())
+		security.authorizeRequests(authorize -> 
+				authorize.antMatchers(AUTH_LIST).permitAll()
+				.anyRequest().authenticated())
 		.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 		
 //		security.addFilterBefore(AuthEntryPointJwt, UsernamePasswordAuthenticationFilter.class);
