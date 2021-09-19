@@ -37,7 +37,7 @@ public class StartUpConfig {
 			UserEntity adam= UserEntity.builder()
 					.email("test@gmail.com")
 					.username("test")
-					.password("1234")
+//					.password("1234")
 					.build();
 			
 			

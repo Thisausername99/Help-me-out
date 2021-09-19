@@ -6,7 +6,7 @@ package com.international.authoriziation.server.model.mapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import com.international.authoriziation.server.model.dto.SignupRequest;
+import com.international.authoriziation.server.model.dto.LoginRequest;
 
 import com.international.authoriziation.server.model.entity.UserEntity;
 
@@ -15,10 +15,10 @@ import com.international.authoriziation.server.model.entity.UserEntity;
  *
  */
 @Component
-public class UserMapper extends BaseMapper<UserEntity, SignupRequest>{
+public class UserMapper extends BaseMapper<UserEntity, LoginRequest>{
 
 	@Override
-	public UserEntity convertToEntity(SignupRequest dto, Object... args) {
+	public UserEntity convertToEntity(LoginRequest dto, Object... args) {
 		UserEntity userEntity = new UserEntity();
         if (dto != null) {
             BeanUtils.copyProperties(dto, userEntity);
@@ -27,13 +27,8 @@ public class UserMapper extends BaseMapper<UserEntity, SignupRequest>{
 	}
 
 	@Override
-	public SignupRequest convertToDto(UserEntity entity, Object... args) {
-		SignupRequest user = new SignupRequest();
-        if (entity != null) {
-            BeanUtils.copyProperties(entity, user);
-        }
-        return user;
+	public LoginRequest convertToDto(UserEntity entity, Object... args) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-
 }

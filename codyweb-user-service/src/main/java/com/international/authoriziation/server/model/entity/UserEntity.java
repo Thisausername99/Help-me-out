@@ -2,7 +2,6 @@ package com.international.authoriziation.server.model.entity;
 
 import java.io.Serializable;
 //import java.io.Serializable;
-import java.util.*;
 
 import javax.persistence.*;
 //import javax.persistence.SequenceGenerator;
@@ -14,15 +13,12 @@ import javax.validation.constraints.Size;
 
 import lombok.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.international.authoriziation.server.model.dto.Status;
 //import com.international.authoriziation.server.role.Role;
 //import com.international.codyweb.post.Post;
-import com.international.authoriziation.server.role.Role;
 
 
 
-//use Data encouter servlet error ?
+//use Data encounter servlet error ?
 @Entity
 @Table(name = "users") 
 @Getter
@@ -35,9 +31,11 @@ public class UserEntity implements Serializable {
 
 	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE) 
 	private Long id;
-
-
+	
+	@Column(unique = true)
 	@NotBlank
+	private String authId;
+	
 	@Size(max = 20)
 	private String username;
 
@@ -46,21 +44,9 @@ public class UserEntity implements Serializable {
 	@Email
 	@Column(unique = true)
 	private String email;
-
-	@NotEmpty
-	private String password;
-
-	//    @Enumerated(EnumType.STRING)
-	//    private Status status;
-
+	
+	
 	private boolean accountVerified;
-	//
-	//	private int failedLoginAttempts;
-	//
-	private boolean loginDisabled;
-
-
-
 	//	//User is parent of posts
 	//	@JsonManagedReference
 	//	//	@JsonIgnore
@@ -70,24 +56,24 @@ public class UserEntity implements Serializable {
 
 	//Member can have many role and role can be assigned to many member
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(	name = "user_roles", 
-	joinColumns = @JoinColumn(name = "user_id"), 
-	inverseJoinColumns = @JoinColumn(name = "role_id"))
-	@JsonManagedReference
-	@Builder.Default
-	private Set<Role> roles = new HashSet<>();
-
-	
-	public void addUserRoles(Role role){
-		roles.add(role);
-		role.getUsers().add(this);
-	}
-
-	public void removeUserRoles(Role role){
-		roles.remove(role);
-		role.getUsers().remove(this);
-	}
+//	@ManyToMany(fetch = FetchType.LAZY)
+//	@JoinTable(	name = "user_roles", 
+//	joinColumns = @JoinColumn(name = "user_id"), 
+//	inverseJoinColumns = @JoinColumn(name = "role_i))
+//	@JsonManagedReference
+//	@Builder.Default
+//	private Set<Role> roles = new HashSet<>();
+//
+//	
+//	public void addUserRoles(Role role){
+//		roles.add(role);
+//		role.getUsers().add(this);
+//	}
+//
+//	public void removeUserRoles(Role role){
+//		roles.remove(role);
+//		role.getUsers().remove(this);
+//	}
 
 
 

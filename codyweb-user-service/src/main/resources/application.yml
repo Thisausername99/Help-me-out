@@ -38,13 +38,15 @@ info:
   app:
     name: ${spring.application.name}
 
-app:
-  config:
-    keycloak:
-      server-url: http://localhost:8089/auth
-      realm: codyweb
-      clientId: codyweb-client
-      client-secret: d9c36075-3519-4a42-a198-f53dbc566ede
+
+#keycloak:
+#  auth-server-url: http://localhost:8089/auth
+#  realm: codyweb
+#  resource: login-app
+#  public-client: true
+#  principal-attribute: preferred_username
+#  clientId: codyweb-client
+#  client-secret: d9c36075-3519-4a42-a198-f53dbc566ede
 
 cody:
   app:
