@@ -131,7 +131,6 @@ public class UserServiceImpls implements UserService {
 		UserEntity user = userMapper.convertToEntity(loginDto, new UserEntity());
 		userRepository.save(user);
 		LOG.info("user saved!");
-		return;
 	}
 
 
