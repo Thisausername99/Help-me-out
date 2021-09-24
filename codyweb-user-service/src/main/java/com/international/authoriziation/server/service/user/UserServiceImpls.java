@@ -202,11 +202,6 @@ public class UserServiceImpls implements UserService {
 
 
 
-//	private void encodePassword(SignupRequest source, UserEntity target){
-//		target.setPassword(passwordEncoder.encode(source.getPassword()));
-//	}
-
-
 //	@Override
 //	public void checkIfUserVerified(String email) throws UserNotVerifiedException {
 //		try {
