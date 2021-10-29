@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: codyweb-notification-service
+  
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest 
+    password: guest
+  
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+        auth: true
+        starttls.enable: true
+        ssl.trust: smtp.gmail.com
+        
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8089/auth/realms/codyweb
+server:
+  port: 8084
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+info:
+  app:
+    name: ${spring.application.name}
+
+cody:
+  app:
+    base.url: http://localhost:8082
+    config:
+      keycloak:
+        server-url: http://localhost:8089/auth
+        realm: codyweb
+        clientId: codyweb-client
+        client-secret: d9c36075-3519-4a42-a198-f53dbc566ede
+
+  
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG

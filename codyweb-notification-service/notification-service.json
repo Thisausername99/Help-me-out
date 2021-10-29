@@ -1,0 +1,5 @@
+{
+	"spring.mail.username": "codyhoang99@gmail.com",
+	"spring.mail.password":"Cody!3399",
+	"rabbitmq.queue":"codyweb.queue"
+}

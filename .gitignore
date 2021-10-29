@@ -3,7 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse
 
 
-codyweb-notification-service/
+; codyweb-notification-service/
 desktop.ini
 
 ### Eclipse ###
